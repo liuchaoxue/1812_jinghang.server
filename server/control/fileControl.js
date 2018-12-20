@@ -11,7 +11,11 @@ router.get('/_handel', function (req, res) {
 });
 
 router.post('/_handel', function (req, res) {
-    console.log(req.body);
+    
+    var urlData = JSON.parse(req.body.data);
+    var url = JSON.parse(req.body);
+
+    console.log(urlData, url);
     res.send({code: 0, data: "成功访问回调post接口"})
 });
 
