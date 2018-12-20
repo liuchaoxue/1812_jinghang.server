@@ -15,7 +15,7 @@ router.post('/_handel', function (req, res) {
     var urlData = req.body;
     console.log(typeof(urlData));
     console.log(urlData.url, urlData.data);
-    
+
     res.send({code: 0, data: "成功访问回调post接口"})
 });
 
