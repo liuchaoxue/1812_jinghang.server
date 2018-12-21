@@ -4,18 +4,19 @@ var fs = require('fs');
 var path = require('path');
 var Vvt = require('../util/webGetVvt');
 var Video = require('../util/webGetVideo');
+var Promise = require('promise');
 
-router.get('/', function (req, res) {
-    res.send({code: 0, data: '爬虫处理'})
-});
+//todo mongodb的添加
 
-router.get('/_handel', function (req, res) {
-    console.log(req.body);
-    res.send({code: 0, data: "成功访问回调get接口"})
-});
+let File = {};
 
-router.post('/_handel', function (req, res) {
-    var videoInfo = JSON.parse(req.body.data);
+File._main = (req, res) => {
+    console.log('媒体中心');
+    res.send({code: 0, data: '媒体中心'});
+};
+
+File._handle = (req, res) => {
+    let videoInfo = JSON.parse(req.body.data);
     //爬虫穿过来的示例数据
     // var videoInfo = {
     //     "content": "Nadjia Yousif: Why you should treat the tech you use at work like a colleague | TED Talk",
@@ -33,7 +34,28 @@ router.post('/_handel', function (req, res) {
         console.log(e);
     }
     res.send({code: 0, data: "成功访问回调post接口"})
-});
+};
+
+File._upload = (req, res) => {
+    let promiseArr = [];
+    for(let i=0;i<req.files.length;i++){
+        let promise = new Promise((resolve) => {
+            let dest = path.join('./server', 'data', 'upload', req.files[i].originalname);
+            fs.rename(req.files[i].path, dest, (err) => {
+                if(err) {
+                    console.log(err);
+                    return resolve(err);
+                }
+                return resolve(req.files[i].originalname);
+            })
+        });
+        promiseArr.push(promise);
+    }
+    Promise.all(promiseArr).then((data) => {
+        console.log('文件上传完成', data);
+        res.send({code: 0, data: '文件上传完成'});
+    });
+};
 
 function loadingVVT(videoInfo, cb) {
     var id = videoInfo.vvt.split(/\/|\?/)[3];
@@ -42,7 +64,7 @@ function loadingVVT(videoInfo, cb) {
         fs.mkdirSync(url);
     }
     Vvt.getTedVvt(id, url, () => {
-        console.log('成功获取字幕');
+        console.log('字幕获取完成');
         cb(id);
     })
 }
@@ -50,8 +72,12 @@ function loadingVVT(videoInfo, cb) {
 function loadingVideo(videoInfo, id) {
     videoInfo.id = id;
     Video.getTedVideo(videoInfo, () => {
-        console.log('成功获取视频')
+        console.log('视频获取完成')
     })
 }
+
+router.get('/', File._main);
+router.post('/_handel', File._handle); //处理web ted来源的文件
+router.post('/_upload', File._upload); //上传媒体文件
 
 module.exports = router;
