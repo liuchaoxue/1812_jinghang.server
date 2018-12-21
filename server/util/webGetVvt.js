@@ -1,5 +1,7 @@
 var request = require('request');
+var path = require('path');
 const fs = require('fs');
+
 
 let Vvt = {};
 
@@ -11,7 +13,13 @@ Vvt.getTedVvt = function (id, url, cb) {
     });
 };
 
-//获取英文字幕
+Vvt.getBbcVvt = function (audioInfo, cb) {
+    let dest = path.join(audioInfo.dest, audioInfo.id + '.txt');
+    fs.writeFileSync(dest, JSON.stringify(audioInfo.text));
+    cb();
+};
+
+//获取ted英文字幕
 function getEnvvt(id, url, cb){
     request('https://hls.ted.com/talks/'+ id +'/subtitles/en/full.vtt', function (error, response, body) {
         if (!error && response.statusCode == 200) {
@@ -29,7 +37,7 @@ function getEnvvt(id, url, cb){
     })
 }
 
-//获取中文字幕
+//获取ted中文字幕
 function getZhvvt(id, url, cb){
     request('https://hls.ted.com/talks/'+ id +'/subtitles/zh-cn/full.vtt', function (error, response, body) {
         if (!error && response.statusCode == 200) {
