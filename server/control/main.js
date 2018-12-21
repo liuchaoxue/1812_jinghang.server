@@ -146,7 +146,7 @@ function loadingVideo(videoInfo) {
 
     videoInfo.id = id;
     return new Promise(resolve => {
-        let child = child_process.fork('./get_video.js');
+        let child = child_process.fork('./webGetVideo.js');
         child.send(videoInfo);
         child.on('message', function (m) {
             if (m == 'close') {
