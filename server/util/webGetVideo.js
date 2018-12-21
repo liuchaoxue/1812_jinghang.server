@@ -1,5 +1,4 @@
 const  {exec } = require('child_process');
-const download = require('download');
 
 let videoPath = './server/data/ted/';
 
@@ -10,10 +9,18 @@ Video.getTedVideo = function (videoInfo, cb) {
     let id = videoInfo.id;
 
     let dist = videoPath + id;
-    download(url, dist).then(() => {
-        console.log('video is ok');
+
+    let cmd = 'you-get -o '+ dist + ' '+ url;
+    exec(cmd, (err, stdout, stderr) => {
+        if (err) {
+            console.error(`exec error: ${err}`);
+            return;
+        }
+        console.log('out: '+stdout);
+        console.log('err: '+stderr);
+        console.log('ok');
         cb();
-    })
+    });
 };
 
 module.exports = Video;
