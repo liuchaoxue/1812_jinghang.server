@@ -64,7 +64,7 @@ File._upload = (req, res) => {
     let promiseArr = [];
     for(let i=0;i<req.files.length;i++){
         let promise = new Promise((resolve) => {
-            let dest = path.join('./server', 'data', 'upload', req.files[i].originalname);
+            let dest = path.join('./public', 'data', 'upload', req.files[i].originalname);
             fs.rename(req.files[i].path, dest, (err) => {
                 if(err) {
                     console.log(err);
@@ -86,7 +86,7 @@ function loadingBbcVVT(audioInfo, cb) {
 
     let url = audioInfo.url;
     let id = url.split('/').pop().split('.')[0];
-    let dest = path.join('./server', 'data', 'bbc', id);
+    let dest = path.join('./public', 'data', 'bbc', id);
     if (!fs.existsSync(dest)) {
         fs.mkdirSync(dest);
     }
@@ -106,7 +106,7 @@ function loadingBbcAudio(data, cb) {
 
 function loadingTedVVT(videoInfo, cb) {
     var id = videoInfo.vvt.split(/\/|\?/)[3];
-    var url = path.join('./server','data', 'ted', id);
+    var url = path.join('./public','data', 'ted', id);
     if (!fs.existsSync(url)) {
         fs.mkdirSync(url);
     }
