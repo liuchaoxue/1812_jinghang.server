@@ -5,10 +5,10 @@ var path = require('path');
 var Vvt = require('../util/webGetVvt');
 var Video = require('../util/webGetVideo');
 var Audio = require('../util/webGetAudio');
+var FileModel = require('../model/fileModel');
 
 var Promise = require('promise');
 
-//todo mongodb的添加
 
 let File = {};
 
@@ -61,6 +61,14 @@ File.bbc_handel = (req, res) => {
 };
 
 File._upload = (req, res) => {
+
+    let vvt;
+    if(req.body.vvt){
+        vvt = req.body.vvt;
+    }else {
+        vvt = '';
+    }
+
     let promiseArr = [];
     for(let i=0;i<req.files.length;i++){
         let promise = new Promise((resolve) => {
@@ -70,7 +78,16 @@ File._upload = (req, res) => {
                     console.log(err);
                     return resolve(err);
                 }
-                return resolve(req.files[i].originalname);
+                let pram = {
+                    fileName: req.files[i].originalname,
+                    fileUrl: dest,
+                    vvt: vvt,
+                    source: 'upload'
+                };
+                let newFile = new FileModel(pram);
+                newFile.save(function (err, data) {
+                    return resolve(data);
+                });
             })
         });
         promiseArr.push(promise);
