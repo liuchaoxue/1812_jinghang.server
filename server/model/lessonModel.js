@@ -10,7 +10,7 @@ var LessonSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'materials'
     },
-    category: String //类别（iword）
+    category: String  //类别（iword/italk）
 });
 
 //获取所有课程
