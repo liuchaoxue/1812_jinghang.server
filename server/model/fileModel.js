@@ -13,7 +13,7 @@ var FileSchema = new Schema({
 
 //获取所有文件
 FileSchema.statics.get_all_file = function (options, page) {
-    return this.find(options).skip((page-1)*10).limit(10).exec();
+    return this.find().exec();
 };
 
 //获取所有文件数量

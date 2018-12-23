@@ -98,6 +98,11 @@ File._upload = (req, res) => {
     });
 };
 
+File._getall = (req, res) => {
+    FileModel.get_all_file().then((data) => {
+        res.send({code: 0, data: data});
+    })
+};
 
 function loadingBbcVVT(audioInfo, cb) {
 
@@ -144,5 +149,6 @@ router.get('/', File._main);
 router.post('/ted/_handel', File.ted_handle); //处理web ted来源的文件
 router.post('/bbc/_handel', File.bbc_handel); //处理bbc来源文件
 router.post('/_upload', File._upload); //上传媒体文件
+router.get('/_getall', File._getall); //获取所有上传文件
 
 module.exports = router;

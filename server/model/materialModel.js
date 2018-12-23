@@ -6,18 +6,38 @@ var MaterialSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'files'
     },
-    source: String, //来源（ewa）
-    category: String, //类别（iword）
-    enTitle: String, //英文标题
-    zhTitle: String, //中文标题
-    abstract: String, //摘要
-    label: String, //标签
-    enVvt: String,　//英文字幕
-    zhVvt: String,　//中文字幕
-    class: String, //类型
-    difficulty: String, //难度
-    status: Number  //发布状态：０未发布，１待发布，２已发布
+    cms: String,
+    source: String,
+    category: String,
+    enTitle: String,
+    zhTitle: String,
+    abstract: String,
+    label: String,
+    enVvt: String,
+    zhVvt: String,
+    class: String,
+    difficulty: String,
+    status: Number
 });
+
+// {
+//     fileId: {
+//         type: Schema.Types.ObjectId,
+//             ref: 'files'
+//     },
+//     cms: String, //cms
+//         source: String, //来源（ewa）
+//     category: String, //类别（iword）
+//     enTitle: String, //英文标题
+//     zhTitle: String, //中文标题
+//     abstract: String, //摘要
+//     label: String, //标签
+//     enVvt: String,　//英文字幕
+//     zhVvt: String,　//中文字幕
+//     class: String, //类型
+//     difficulty: String, //难度
+//     status: Number  //发布状态：０未发布，１待发布，２已发布
+// }
 
 //分页获取筛选条件下的所有文件
 MaterialSchema.statics.get_all_file = function (options, page) {
