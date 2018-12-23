@@ -45,7 +45,7 @@ Material._find = (req, res) => {
 Material._getnum = (req, res) => {
     let materialInfo = req.query;
     getPram(materialInfo, (result) => {
-        MaterialModel.get_all_file(result, parseInt(page)).then((data) => {
+        MaterialModel.get_all_num(result).then((data) => {
             return res.send({code: 0, data: data.length});
         })
     })
