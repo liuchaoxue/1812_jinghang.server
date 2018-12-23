@@ -6,7 +6,6 @@ var MaterialSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'files'
     },
-    cms: String,
     source: String,
     category: String,
     enTitle: String,
@@ -26,7 +25,7 @@ var MaterialSchema = new Schema({
 //             ref: 'files'
 //     },
 //     cms: String, //cms
-//         source: String, //来源（ewa）
+//     source: String, //来源（ewa）
 //     category: String, //类别（iword）
 //     enTitle: String, //英文标题
 //     zhTitle: String, //中文标题
@@ -60,7 +59,7 @@ MaterialSchema.statics.delete = function (id) {
 };
 
 //更新
-MaterialSchema.statics.update = function (options, id) {
+MaterialSchema.statics.update_material = function (options, id) {
     return this.update({_id: id}, options).exec();
 };
 

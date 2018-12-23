@@ -12,7 +12,7 @@ var FileSchema = new Schema({
 });
 
 //获取所有文件
-FileSchema.statics.get_all_file = function (options, page) {
+FileSchema.statics.get_all_file = function () {
     return this.find().exec();
 };
 

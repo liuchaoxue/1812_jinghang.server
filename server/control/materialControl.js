@@ -56,7 +56,7 @@ Material._update　= (req, res) => {
     getPram(materialInfo, (result) => {
         let id = materialInfo.materialId;
         if(id){
-            MaterialModel.update(result, id).then((data) => {
+            MaterialModel.update_material(result, id).then((data) => {
                 return res.send({code: 0, data: data})
             })
         }else {
@@ -113,8 +113,6 @@ router.get('/_find', Material._find);  //根据筛选条件获取所有
 router.get('/_getnum', Material._getnum);　//根据筛选条件获取所有数量
 router.post('/_update', Material._update); //更新媒体信息
 router.get('/_delete', Material._delete); //删除一条媒体数据
-
-//todo 1. iword-iword编辑课程完成后存储接口/更新接口（保存草根－status=0/1,发布－status=2）
 
 
 module.exports = router;
