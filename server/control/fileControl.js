@@ -94,7 +94,7 @@ File._upload = (req, res) => {
     }
     Promise.all(promiseArr).then((data) => {
         console.log('文件上传完成', data);
-        res.send({code: 0, data: '文件上传完成'});
+        res.send({code: 0, data: data});
     });
 };
 
