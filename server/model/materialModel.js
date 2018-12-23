@@ -54,13 +54,13 @@ MaterialSchema.statics.get_one = function (id) {
     return this.findOne({_id: id}).exec();
 };
 
-//删除一个文件
+//删除
 MaterialSchema.statics.delete = function (id) {
     return this.remove({_id: id}).exec();
 };
 
-//重命名
-MaterialSchema.statics.rename = function (options, id) {
+//更新
+MaterialSchema.statics.update = function (options, id) {
     return this.update({_id: id}, options).exec();
 };
 

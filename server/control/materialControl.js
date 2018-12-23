@@ -51,6 +51,31 @@ Material._getnum = (req, res) => {
     })
 };
 
+Material._update　= (req, res) => {
+    let materialInfo = req.body;
+    getPram(materialInfo, (result) => {
+        let id = materialInfo.materialId;
+        if(id){
+            MaterialModel.update(result, id).then((data) => {
+                return res.send({code: 0, data: data})
+            })
+        }else {
+            return res.send({code: 1, data: '缺少materialId参数'})
+        }
+    })
+};
+
+Material._delete　= (req, res) => {
+    let id = req.query.materialId;
+    if(id){
+        MaterialModel.delete(id).then(data => {
+            return res.send({code: 0, data: data})
+        })
+    }else {
+        return res.send({code: 1, data: '缺少materialId参数'})
+    }
+};
+
 //创建＆筛选获取参数
 function getPram(material, cb) {
     let pram = {};
@@ -86,9 +111,10 @@ router.get('/', Material._main);
 router.post('/_add', Material._add);　//添加一条媒体
 router.get('/_find', Material._find);  //根据筛选条件获取所有
 router.get('/_getnum', Material._getnum);　//根据筛选条件获取所有数量
+router.post('/_update', Material._update); //更新媒体信息
+router.get('/_delete', Material._delete); //删除一条媒体数据
 
 //todo 1. iword-iword编辑课程完成后存储接口/更新接口（保存草根－status=0/1,发布－status=2）
-//todo 2. 部署到服务器
-//todo 3. 写接口文档
+
 
 module.exports = router;
