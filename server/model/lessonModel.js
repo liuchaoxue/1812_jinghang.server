@@ -11,7 +11,18 @@ var LessonSchema = new Schema({
         ref: 'materials'
     },
     category: String,  //类别（iword/italk）
-    status: Number
+    status: Number,
+    stage:  Number,  //生成文章状态 0未生成，１已生成
+    createTime: {
+        type: Date,
+        default: Date.now
+    },
+    updateTime: {
+        type: Date,
+        default: Date.now
+    }
+}, {
+    versionKey: false
 });
 
 //获取所有课程

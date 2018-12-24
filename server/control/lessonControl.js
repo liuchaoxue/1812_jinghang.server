@@ -9,11 +9,12 @@ let Lesson = {};
 Lesson._add = (req, res) => {
     let lessonInfo = req.body;
     let pram = {};
-    if(lessonInfo.cms && lessonInfo.materialId && lessonInfo.category && lessonInfo.status){
+    if(lessonInfo.cms && lessonInfo.materialId && lessonInfo.category && lessonInfo.status && lessonInfo.stage){
         pram.cms = lessonInfo.cms;
         pram.materialId = lessonInfo.materialId;
         pram.category = lessonInfo.category;
         pram.status = lessonInfo.status;
+        pram.stage = lessonInfo.stage;
 
         let newLesson = new LessonModel(pram);
         newLesson.save((err, data) => {
@@ -42,6 +43,9 @@ Lesson._find = (req, res) => {
     if(lessonInfo.status){
         pram.status = lessonInfo.status;
     }
+    if(lessonInfo.stage){
+        pram.stage = lessonInfo.stage;
+    }
 
     let page = lessonInfo.page;
     if(page){
@@ -68,6 +72,9 @@ Lesson._getnum = (req, res) => {
     if(lessonInfo.status){
         pram.status = lessonInfo.status;
     }
+    if(lessonInfo.stage){
+        pram.stage = lessonInfo.stage;
+    }
 
     LessonModel.get_all_num(pram).then(data => {
         return res.send({code: 0, data: data.length});
@@ -88,6 +95,9 @@ Lesson._update = (req, res) => {
     }
     if(lessonInfo.status){
         pram.status = lessonInfo.status;
+    }
+    if(lessonInfo.stage){
+        pram.stage = lessonInfo.stage;
     }
 
     if(lessonInfo.lessonId){
@@ -133,6 +143,7 @@ Lesson._public = (req, res) => {
         return res.send({code: 1, data: '缺少参数'})
     }
 };
+
 
 router.post('/_add', Lesson._add);  //添加ieord类型的课程
 router.get('/_find', Lesson._find);  //根据条件分页获取课程

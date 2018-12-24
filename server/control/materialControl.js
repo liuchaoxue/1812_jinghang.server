@@ -3,6 +3,7 @@ var router = express.Router();
 var fs = require('fs');
 var Promise = require('promise');
 var MaterialModel = require('../model/materialModel');
+var LessonModel = require('../model/lessonModel');
 
 let Material = {};
 
@@ -82,6 +83,27 @@ Material._getone = (req, res) => {
     }
 };
 
+Material._create = (req, res) => {
+    let info = req.body;
+    if(info.materialId && info.zhTitle && info.enTitle && info.category && info.status){
+        let pram = {};
+        pram.cms = '# ' + info.enTitle + '\n' + '# ' + info.zhTitle;
+        pram.materialId = info.materialId;
+        pram.category = info.category;
+        pram.status = info.status;
+        pram.stage = 1;
+        let newLesson = new LessonModel(pram);
+        newLesson.save((err, data) => {
+            if(err){
+                return res.send({code: 1, data: '添加课程失败'})
+            }
+            return res.send({code: 0, data: data});
+        });
+    }else {
+        return res.send({code: 1, data: "缺少参数"});
+    }
+};
+
 //创建＆筛选获取参数
 function getPram(material, cb) {
 
@@ -131,6 +153,7 @@ router.get('/_getnum', Material._getnum);　//根据筛选条件获取所有数�
 router.post('/_update', Material._update); //更新媒体信息
 router.get('/_delete', Material._delete); //删除一条媒体数据
 router.get('/_getone', Material._getone); //根据id获取一条媒体数据
+router.post('/_createCMS', Material._create); //生成cms文章
 
 
 module.exports = router;
