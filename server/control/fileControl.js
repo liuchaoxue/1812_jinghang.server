@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var path = require('path');
+var UUID = require('node-uuid');
 var Vvt = require('../util/webGetVvt');
 var Video = require('../util/webGetVideo');
 var Audio = require('../util/webGetAudio');
@@ -72,8 +73,11 @@ File._upload = (req, res) => {
     let promiseArr = [];
     for(let i=0;i<req.files.length;i++){
         let promise = new Promise((resolve) => {
-            let dest = path.join('./public', 'data', 'upload', req.files[i].originalname);
-            fs.rename(req.files[i].path, dest, (err) => {
+            let nameArr = req.files[i].originalname.split('.');
+            let format = nameArr[nameArr.length - 1];
+            let fileUuid = UUID.v1();
+            let dest = path.join('data', 'upload', fileUuid + '.' +  format);
+            fs.rename(req.files[i].path, './public/' + dest, (err) => {
                 if(err) {
                     console.log(err);
                     return resolve(err);
