@@ -84,28 +84,39 @@ Material._getone = (req, res) => {
 
 //创建＆筛选获取参数
 function getPram(material, cb) {
+
     let pram = {};
     if(material.fileId){
         pram.fileId = material.fileId;
-    }else if(material.source){
+    }
+    if(material.source){
         pram.source = material.source;
-    }else if(material.category){
+    }
+    if(material.category){
         pram.category = material.category;
-    }else if(material.enTitle){
+    }
+    if(material.enTitle){
         pram.enTitle = material.enTitle;
-    }else if(material.zhTitle){
+    }
+    if(material.zhTitle){
         pram.zhTitle = material.zhTitle;
-    }else if(material.abstract){
+    }
+    if(material.abstract){
         pram.abstract = material.abstract;
-    }else if(material.label){
+    }
+    if(material.label){
         pram.label = material.label;
-    }else if(material.enVvt){
+    }
+    if(material.enVvt){
         pram.enVvt = material.enVvt;
-    }else if(material.zhVvt){
+    }
+    if(material.zhVvt){
         pram.zhVvt = material.zhVvt;
-    }else if(material.class){
+    }
+    if(material.class){
         pram.class = material.class;
-    }else if(material.difficulty){
+    }
+    if(material.difficulty){
         pram.difficulty = material.difficulty;
     }
 

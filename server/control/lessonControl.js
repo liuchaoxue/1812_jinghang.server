@@ -32,11 +32,14 @@ Lesson._find = (req, res) => {
     let pram = {};
     if(lessonInfo.cms){
         pram.cms = lessonInfo.cms;
-    }else if(lessonInfo.materialId){
+    }
+    if(lessonInfo.materialId){
         pram.materialId = lessonInfo.materialId;
-    }else if(lessonInfo.category){
+    }
+    if(lessonInfo.category){
         pram.category = lessonInfo.category;
-    }else if(lessonInfo.status){
+    }
+    if(lessonInfo.status){
         pram.status = lessonInfo.status;
     }
 
@@ -55,11 +58,14 @@ Lesson._getnum = (req, res) => {
     let pram = {};
     if(lessonInfo.cms){
         pram.cms = lessonInfo.cms;
-    }else if(lessonInfo.materialId){
+    }
+    if(lessonInfo.materialId){
         pram.materialId = lessonInfo.materialId;
-    }else if(lessonInfo.category){
+    }
+    if(lessonInfo.category){
         pram.category = lessonInfo.category;
-    }else if(lessonInfo.status){
+    }
+    if(lessonInfo.status){
         pram.status = lessonInfo.status;
     }
 
@@ -73,11 +79,14 @@ Lesson._update = (req, res) => {
     let pram = {};
     if(lessonInfo.cms){
         pram.cms = lessonInfo.cms;
-    }else if(lessonInfo.materialId){
+    }
+    if(lessonInfo.materialId){
         pram.materialId = lessonInfo.materialId;
-    }else if(lessonInfo.category){
+    }
+    if(lessonInfo.category){
         pram.category = lessonInfo.category;
-    }else if(lessonInfo.status){
+    }
+    if(lessonInfo.status){
         pram.status = lessonInfo.status;
     }
 
