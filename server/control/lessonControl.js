@@ -101,13 +101,36 @@ Lesson._delete = (req, res) => {
     }
 };
 
+Lesson._public = (req, res) => {
+    let lessonInfo = req.body;
+    let id = lessonInfo.lessonId;
+    let time = lessonInfo.time; //定时时间戳，精确到秒
+    let nowTime = parseInt((Date.now())/1000);
+    if(id　&& time){
+        if(time <= nowTime){
+            return res.send({code: 1, data: '设定时间小于当前时间'})
+        }else {
+            let timeout = time - nowTime;
+            LessonModel.update_lesson({status: 1}, id).then(data => {
+                setTimeout(() => {
+                    LessonModel.update_lesson({status: 2}, id).then(data => {
+                        console.log(id, '已发布');
+                    })
+                }, timeout);
+                return res.send({code: 0, data: data})
+            })
+        }
+    }else {
+        return res.send({code: 1, data: '缺少参数'})
+    }
+};
+
 router.post('/_add', Lesson._add);  //添加ieord类型的课程
 router.get('/_find', Lesson._find);  //根据条件分页获取课程
 router.get('/_getnum', Lesson._getnum); //根据条件获取课程的总数量
 router.post('/_update', Lesson._update); //更新课程信息
 router.get('/_delete', Lesson._delete); //删除一个课程
+router.post('/_public', Lesson._public); //定时发布一个课程
 
-
-//todo 定时发布
 
 module.exports = router;
