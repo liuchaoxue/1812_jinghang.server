@@ -4,6 +4,11 @@ var fileControl = require('../control/fileControl');
 var materialControl = require('../control/materialControl');
 var lessonControl = require('../control/lessonControl');
 
+//路由到页面
+router.get('/', function (req, res) {
+    res.type('html');
+    res.render('../public/html/index.html');
+});
 
 router.use('/file', fileControl); //媒体中心的文件处理（包括爬虫的文件下载处理，媒体文件的上传处理）
 router.use('/material', materialControl); //媒体中心的媒体库

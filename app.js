@@ -21,7 +21,9 @@ app.all('*', function(req, res, next) {
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+// app.set('view engine', 'pug');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 app.use(upload.array('file'));
 app.use(logger('dev'));
