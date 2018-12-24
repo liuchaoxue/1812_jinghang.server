@@ -117,6 +117,18 @@ File._getall = (req, res) => {
     })
 };
 
+
+File._getone = (req, res) => {
+    let id = req.query.fileId;
+    if(id){
+        FileModel.get_one(id).then(data => {
+            return res.send({code: 0, data: data});
+        })
+    }else {
+        return res.send({code: 1, data: '缺少lessonId参数'})
+    }
+};
+
 function loadingBbcVVT(audioInfo, cb) {
 
     let url = audioInfo.url;
@@ -163,5 +175,6 @@ router.post('/ted/_handel', File.ted_handle); //处理web ted来源的文件
 router.post('/bbc/_handel', File.bbc_handel); //处理bbc来源文件
 router.post('/_upload', File._upload); //上传媒体文件
 router.get('/_getall', File._getall); //获取所有上传文件
+router.get('/_getone', File._getone); //获取单个ｆｉｌｅ文件
 
 module.exports = router;
