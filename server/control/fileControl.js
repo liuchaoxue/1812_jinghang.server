@@ -7,6 +7,7 @@ var Vvt = require('../util/webGetVvt');
 var Video = require('../util/webGetVideo');
 var Audio = require('../util/webGetAudio');
 var FileModel = require('../model/fileModel');
+var MaterialModel = require('../model/materialModel');
 
 var Promise = require('promise');
 
@@ -90,7 +91,15 @@ File._upload = (req, res) => {
                 };
                 let newFile = new FileModel(pram);
                 newFile.save(function (err, data) {
-                    return resolve(data);
+
+                    let options = {
+                        fileId: data._id
+                    };
+
+                    let newMaterial = new MaterialModel(options);
+                    newMaterial.save((err, result) => {
+                        return resolve({file: data, material: result});
+                    });
                 });
             })
         });

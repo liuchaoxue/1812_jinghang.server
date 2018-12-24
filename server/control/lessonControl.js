@@ -107,4 +107,7 @@ router.get('/_getnum', Lesson._getnum); //根据条件获取课程的总数量
 router.post('/_update', Lesson._update); //更新课程信息
 router.get('/_delete', Lesson._delete); //删除一个课程
 
+
+//todo 定时发布
+
 module.exports = router;
