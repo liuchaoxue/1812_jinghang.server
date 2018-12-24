@@ -6,7 +6,7 @@ var LessonModel = require('../model/lessonModel');
 
 let Lesson = {};
 
-Lesson._iword_add = (req, res) => {
+Lesson._add = (req, res) => {
     let lessonInfo = req.body;
     let pram = {};
     if(lessonInfo.cms && lessonInfo.materialId && lessonInfo.category && lessonInfo.status){
@@ -101,7 +101,7 @@ Lesson._delete = (req, res) => {
     }
 };
 
-router.post('/iword/_add', Lesson._iword_add);  //添加ieord类型的课程
+router.post('/_add', Lesson._add);  //添加ieord类型的课程
 router.get('/_find', Lesson._find);  //根据条件分页获取课程
 router.get('/_getnum', Lesson._getnum); //根据条件获取课程的总数量
 router.post('/_update', Lesson._update); //更新课程信息
