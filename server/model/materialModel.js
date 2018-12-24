@@ -15,8 +15,7 @@ var MaterialSchema = new Schema({
     enVvt: String,
     zhVvt: String,
     class: String,
-    difficulty: String,
-    status: Number
+    difficulty: String
 });
 
 // {

@@ -9,10 +9,11 @@ let Lesson = {};
 Lesson._iword_add = (req, res) => {
     let lessonInfo = req.body;
     let pram = {};
-    if(lessonInfo.cms && lessonInfo.materialId && lessonInfo.category){
+    if(lessonInfo.cms && lessonInfo.materialId && lessonInfo.category && lessonInfo.status){
         pram.cms = lessonInfo.cms;
         pram.materialId = lessonInfo.materialId;
         pram.category = lessonInfo.category;
+        pram.status = lessonInfo.status;
 
         let newLesson = new LessonModel(pram);
         newLesson.save((err, data) => {
@@ -35,6 +36,8 @@ Lesson._find = (req, res) => {
         pram.materialId = lessonInfo.materialId;
     }else if(lessonInfo.category){
         pram.category = lessonInfo.category;
+    }else if(lessonInfo.status){
+        pram.status = lessonInfo.status;
     }
 
     let page = lessonInfo.page;
@@ -56,7 +59,10 @@ Lesson._getnum = (req, res) => {
         pram.materialId = lessonInfo.materialId;
     }else if(lessonInfo.category){
         pram.category = lessonInfo.category;
+    }else if(lessonInfo.status){
+        pram.status = lessonInfo.status;
     }
+
     LessonModel.get_all_num(pram).then(data => {
         return res.send({code: 0, data: data.length});
     })
@@ -71,6 +77,8 @@ Lesson._update = (req, res) => {
         pram.materialId = lessonInfo.materialId;
     }else if(lessonInfo.category){
         pram.category = lessonInfo.category;
+    }else if(lessonInfo.status){
+        pram.status = lessonInfo.status;
     }
 
     if(lessonInfo.lessonId){

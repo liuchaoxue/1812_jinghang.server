@@ -13,11 +13,6 @@ Material._main = (req, res) => {
 Material._add = (req, res) => {
     let materialInfo = req.body;
     getPram(materialInfo, (result) => {
-        if(materialInfo.status){
-            result.status = materialInfo.status;
-        }else {
-            result.status = 0;
-        }
         let newMaterial = new MaterialModel(result);
         newMaterial.save((err, data) => {
             if(err){
