@@ -85,17 +85,19 @@ Material._getone = (req, res) => {
 
 Material._create = (req, res) => {
     let info = req.body;
-    if(info.materialId && info.zhTitle && info.enTitle && info.category && info.status){
+    if(info.materialId && info.zhTitle && info.enTitle && info.category && info.status && info.difficulty){
         let pram = {};
         pram.cms = '# ' + info.enTitle + '\n' + '# ' + info.zhTitle;
         pram.materialId = info.materialId;
+        pram.title = info.zhTitle;
+        pram.difficulty = info.difficulty;
         pram.category = info.category;
         pram.status = info.status;
         pram.stage = 1;
         let newLesson = new LessonModel(pram);
         newLesson.save((err, data) => {
             if(err){
-                return res.send({code: 1, data: '添加课程失败'})
+                return res.send({code: 1, data: '添加课程失败'});
             }
             return res.send({code: 0, data: data});
         });

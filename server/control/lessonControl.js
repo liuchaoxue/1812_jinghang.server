@@ -9,9 +9,11 @@ let Lesson = {};
 Lesson._add = (req, res) => {
     let lessonInfo = req.body;
     let pram = {};
-    if(lessonInfo.cms && lessonInfo.materialId && lessonInfo.category && lessonInfo.status && lessonInfo.stage){
+    if(lessonInfo.cms && lessonInfo.materialId && lessonInfo.category && lessonInfo.status && lessonInfo.stage && lessonInfo.zhTitle && lessonInfo.difficulty){
         pram.cms = lessonInfo.cms;
         pram.materialId = lessonInfo.materialId;
+        pram.title = lessonInfo.zhTitle;
+        pram.difficulty = lessonInfo.difficulty;
         pram.category = lessonInfo.category;
         pram.status = lessonInfo.status;
         pram.stage = lessonInfo.stage;
@@ -46,6 +48,12 @@ Lesson._find = (req, res) => {
     if(lessonInfo.stage){
         pram.stage = lessonInfo.stage;
     }
+    if(lessonInfo.zhTitle){
+        pram.title = lessonInfo.zhTitle;
+    }
+    if(lessonInfo.difficulty){
+        pram.difficulty = lessonInfo.difficulty;
+    }
 
     let page = lessonInfo.page;
     if(page){
@@ -75,6 +83,12 @@ Lesson._getnum = (req, res) => {
     if(lessonInfo.stage){
         pram.stage = lessonInfo.stage;
     }
+    if(lessonInfo.zhTitle){
+        pram.title = lessonInfo.zhTitle;
+    }
+    if(lessonInfo.difficulty){
+        pram.difficulty = lessonInfo.difficulty;
+    }
 
     LessonModel.get_all_num(pram).then(data => {
         return res.send({code: 0, data: data.length});
@@ -98,6 +112,12 @@ Lesson._update = (req, res) => {
     }
     if(lessonInfo.stage){
         pram.stage = lessonInfo.stage;
+    }
+    if(lessonInfo.zhTitle){
+        pram.title = lessonInfo.zhTitle;
+    }
+    if(lessonInfo.difficulty){
+        pram.difficulty = lessonInfo.difficulty;
     }
 
     if(lessonInfo.lessonId){
@@ -144,6 +164,16 @@ Lesson._public = (req, res) => {
     }
 };
 
+Lesson._getone = (req, res) => {
+    let lessonInfo = req.query;
+    if(lessonInfo.lessonId){
+        LessonModel.get_one(lessonInfo.lessonId).then(data => {
+            return res.send({code: 0, data: data});
+        })
+    }else {
+        return res.send({code: 1, data: '缺少lessonId参数'})
+    }
+};
 
 router.post('/_add', Lesson._add);  //添加ieord类型的课程
 router.get('/_find', Lesson._find);  //根据条件分页获取课程
@@ -151,6 +181,6 @@ router.get('/_getnum', Lesson._getnum); //根据条件获取课程的总数量
 router.post('/_update', Lesson._update); //更新课程信息
 router.get('/_delete', Lesson._delete); //删除一个课程
 router.post('/_public', Lesson._public); //定时发布一个课程
-
+router.get('/_getone', Lesson._getone); //获取单个课程
 
 module.exports = router;

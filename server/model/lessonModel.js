@@ -10,6 +10,8 @@ var LessonSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'materials'
     },
+    title: String,
+    difficulty: String,
     category: String,  //类别（iword/italk）
     status: Number,
     stage:  Number,  //生成文章状态 0未生成，１已生成
