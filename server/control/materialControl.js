@@ -85,9 +85,9 @@ Material._getone = (req, res) => {
 
 Material._create = (req, res) => {
     let info = req.body;
-    if(info.materialId && info.zhTitle && info.enTitle && info.category && info.status && info.difficulty){
+    if(info.materialId && info.zhTitle && info.category && info.status && info.difficulty){
         let pram = {};
-        pram.cms = '# ' + info.enTitle + '\n' + '# ' + info.zhTitle;
+        pram.cms = '# ' + info.zhTitle;
         pram.materialId = info.materialId;
         pram.title = info.zhTitle;
         pram.difficulty = info.difficulty;
