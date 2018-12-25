@@ -9,14 +9,26 @@ let Lesson = {};
 Lesson._add = (req, res) => {
     let lessonInfo = req.body;
     let pram = {};
-    if(lessonInfo.cms && lessonInfo.materialId && lessonInfo.category && lessonInfo.status && lessonInfo.stage && lessonInfo.zhTitle && lessonInfo.difficulty){
+    if(lessonInfo.cms && lessonInfo.zhTitle){
+
         pram.cms = lessonInfo.cms;
-        pram.materialId = lessonInfo.materialId;
         pram.title = lessonInfo.zhTitle;
-        pram.difficulty = lessonInfo.difficulty;
-        pram.category = lessonInfo.category;
-        pram.status = lessonInfo.status;
-        pram.stage = lessonInfo.stage;
+
+        if(lessonInfo.materialId){
+            pram.materialId = lessonInfo.materialId;
+        }
+        if(lessonInfo.category){
+            pram.category = lessonInfo.category;
+        }
+        if(lessonInfo.status){
+            pram.status = lessonInfo.status;
+        }
+        if(lessonInfo.stage){
+            pram.stage = lessonInfo.stage;
+        }
+        if(lessonInfo.difficulty){
+            pram.difficulty = lessonInfo.difficulty;
+        }
 
         let newLesson = new LessonModel(pram);
         newLesson.save((err, data) => {
