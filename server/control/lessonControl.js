@@ -111,6 +111,9 @@ Lesson._update = (req, res) => {
     let lessonInfo = req.body;
     let pram = {};
     if(lessonInfo.cms){
+        console.log('===============');
+        console.log(lessonInfo.cms);
+        console.log('===============');
         pram.cms = lessonInfo.cms;
     }
     if(lessonInfo.materialId){
