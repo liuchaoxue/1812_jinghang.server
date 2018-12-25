@@ -92,6 +92,11 @@ File._upload = (req, res) => {
                 let newFile = new FileModel(pram);
                 newFile.save(function (err, data) {
 
+                    if(err){
+                        console.log('错误:'+ err)
+                    }
+
+
                     let options = {
                         fileId: data._id,
                         zhVvt: req.files[i].originalname
