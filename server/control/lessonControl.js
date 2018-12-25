@@ -33,7 +33,7 @@ Lesson._add = (req, res) => {
         let newLesson = new LessonModel(pram);
         newLesson.save((err, data) => {
             if(err){
-                return res.send({code: 1, data: '添加课程失败'})
+                return res.send({code: 1, data: '添加课程失败：' + err})
             }
             return res.send({code: 0, data: data});
         })
