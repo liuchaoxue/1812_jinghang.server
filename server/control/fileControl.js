@@ -89,11 +89,12 @@ File._upload = (req, res) => {
                     vvt: vvt,
                     source: 'upload'
                 };
+                console.log(pram)
                 let newFile = new FileModel(pram);
                 newFile.save(function (err, data) {
 
                     if(err){
-                        console.log('错误:'+ err)
+                        return console.log('错误:'+ err)
                     }
 
 
