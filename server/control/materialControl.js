@@ -97,6 +97,7 @@ Material._create = (req, res) => {
         let newLesson = new LessonModel(pram);
         newLesson.save((err, data) => {
             if(err){
+                console.log('========课程=====err:', err);
                 return res.send({code: 1, data: '添加课程失败: '+err});
             }
             return res.send({code: 0, data: data});
