@@ -2,10 +2,7 @@ var db = require('../config/dbConnection');
 var Schema = db.mongoose.Schema;
 
 var LessonSchema = new Schema({
-    cms: {
-        type: String,
-        unique: true
-    },
+    cms: String,
     materialId: {
         type: Schema.Types.ObjectId,
         ref: 'materials'
