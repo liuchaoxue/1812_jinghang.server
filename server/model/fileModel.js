@@ -2,10 +2,7 @@ var db = require('../config/dbConnection');
 var Schema = db.mongoose.Schema;
 
 var FileSchema = new Schema({
-    fileName: {
-        type: String,
-        unique: true
-    },
+    fileName: String,
     fileUrl: String,
     vvt: String,
     source: String
