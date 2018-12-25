@@ -99,7 +99,7 @@ File._upload = (req, res) => {
 
                     let options = {
                         fileId: data._id,
-                        zhVvt: req.files[i].originalname
+                        zhTitle: req.files[i].originalname
                     };
 
                     let newMaterial = new MaterialModel(options);
