@@ -89,7 +89,7 @@ File._upload = (req, res) => {
                     vvt: vvt,
                     source: 'upload'
                 };
-                console.log(pram)
+                console.log(pram);
                 let newFile = new FileModel(pram);
                 newFile.save(function (err, data) {
 
@@ -100,6 +100,7 @@ File._upload = (req, res) => {
 
                     let options = {
                         fileId: data._id,
+                        fileUrl: data.fileUrl,
                         zhTitle: req.files[i].originalname
                     };
 

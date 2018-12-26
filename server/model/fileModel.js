@@ -5,12 +5,22 @@ var FileSchema = new Schema({
     fileName: String,
     fileUrl: String,
     vvt: String,
-    source: String
+    source: String,
+    createTime: {
+        type: Date,
+        default: Date.now
+    },
+    updateTime: {
+        type: Date,
+        default: Date.now
+    }
+}, {
+    versionKey: false
 });
 
 //获取所有文件
 FileSchema.statics.get_all_file = function () {
-    return this.find().exec();
+    return this.find().sort({updateTime:-1}).exec();
 };
 
 //获取所有文件数量

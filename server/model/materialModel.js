@@ -6,6 +6,7 @@ var MaterialSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'files'
     },
+    fileUrl: String,
     source: String,
     category: String,
     enTitle: String,
@@ -15,7 +16,15 @@ var MaterialSchema = new Schema({
     enVvt: String,
     zhVvt: String,
     class: String,
-    difficulty: String
+    difficulty: String,
+    createTime: {
+        type: Date,
+        default: Date.now
+    },
+    updateTime: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 // {
@@ -39,7 +48,7 @@ var MaterialSchema = new Schema({
 
 //分页获取筛选条件下的所有文件
 MaterialSchema.statics.get_all_file = function (options, page) {
-    return this.find(options).skip((page-1)*10).limit(10).exec();
+    return this.find(options).skip((page-1)*10).limit(10).sort({updateTime:-1}).exec();
 };
 
 //获取筛选条件下的所有文件数量
@@ -59,7 +68,7 @@ MaterialSchema.statics.delete = function (id) {
 
 //更新
 MaterialSchema.statics.update_material = function (options, id) {
-    return this.update({_id: id}, options).exec();
+    return this.update({_id: id}, {$set:options}).exec();
 };
 
 

@@ -26,7 +26,7 @@ var LessonSchema = new Schema({
 
 //获取所有课程
 LessonSchema.statics.get_all_file = function (options, page) {
-    return this.find(options).skip((page-1)*10).limit(10).exec();
+    return this.find(options).skip((page-1)*10).limit(10).sort({updateTime:-1}).exec();
 };
 
 //获取所有课程数量

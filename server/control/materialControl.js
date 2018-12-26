@@ -114,6 +114,9 @@ function getPram(material, cb) {
     if(material.fileId){
         pram.fileId = material.fileId;
     }
+    if(material.fileUrl){
+        pram.fileUrl = material.fileUrl;
+    }
     if(material.source){
         pram.source = material.source;
     }
