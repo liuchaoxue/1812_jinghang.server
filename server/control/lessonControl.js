@@ -196,49 +196,64 @@ Lesson._get_iword_public = (req, res) => {
     let pram = {status: {$gte: 1}};
     pram.category = 'iWord';
 
-    LessonModel.get_all_public(pram).then(data => {
-        MaterialModel.get_one(data.materialId).then(result => {
-            data.materialId = result;
-            return res.send({code: 0, data: data});
-        });
-
-    })
+    try{
+        LessonModel.get_all_public(pram).then(data => {
+            MaterialModel.get_one(data.materialId).then(result => {
+                data.materialId = result;
+                return res.send({code: 0, data: data});
+            });
+        })
+    }catch (err){
+        return res.send({code: 1, data: '当前无该类型已发布课程'})
+    }
 };
 
 Lesson._get_italk_public = (req, res) => {
     let pram = {status: {$gte: 1}};
     pram.category = 'iTalk';
 
-    LessonModel.get_all_public(pram).then(data => {
-        MaterialModel.get_one(data.materialId).then(result => {
-            data.materialId = result;
-            return res.send({code: 0, data: data});
-        });
-    })
+    try{
+        LessonModel.get_all_public(pram).then(data => {
+            MaterialModel.get_one(data.materialId).then(result => {
+                data.materialId = result;
+                return res.send({code: 0, data: data});
+            });
+        })
+    }catch (err){
+        return res.send({code: 1, data: '当前无该类型已发布课程'})
+    }
 };
 
 Lesson._get_ifun_public = (req, res) => {
     let pram = {status: {$gte: 1}};
     pram.category = 'iFun';
 
-    LessonModel.get_all_public(pram).then(data => {
-        MaterialModel.get_one(data.materialId).then(result => {
-            data.materialId = result;
-            return res.send({code: 0, data: data});
-        });
-    })
+    try{
+        LessonModel.get_all_public(pram).then(data => {
+            MaterialModel.get_one(data.materialId).then(result => {
+                data.materialId = result;
+                return res.send({code: 0, data: data});
+            });
+        })
+    }catch (err){
+        return res.send({code: 1, data: '当前无该类型已发布课程'})
+    }
 };
 
 Lesson._get_ilisten_public = (req, res) => {
     let pram = {status: {$gte: 1}};
     pram.category = 'iListen';
 
-    LessonModel.get_all_public(pram).then(data => {
-        MaterialModel.get_one(data.materialId).then(result => {
-            data.materialId = result;
-            return res.send({code: 0, data: data});
-        });
-    })
+    try{
+        LessonModel.get_all_public(pram).then(data => {
+            MaterialModel.get_one(data.materialId).then(result => {
+                data.materialId = result;
+                return res.send({code: 0, data: data});
+            });
+        })
+    }catch (err){
+        return res.send({code: 1, data: '当前无该类型已发布课程'})
+    }
 };
 
 router.post('/_add', Lesson._add);  //添加ieord类型的课程
