@@ -28,12 +28,13 @@ Material._find = (req, res) => {
     let materialInfo = req.query;
     getPram(materialInfo, (result) => {
         let page = materialInfo.page;
-        if(page){
-            MaterialModel.get_all_file(result, parseInt(page)).then((data) => {
+        let num = materialInfo.num;
+        if(page && num){
+            MaterialModel.get_all_file(result, parseInt(page), parseInt(num)).then((data) => {
                 return res.send({code: 0, data: data});
             })
         }else {
-            return res.send({code: 1, data: "缺少page参数"});
+            return res.send({code: 1, data: "缺少参数"});
         }
     })
 };
@@ -64,9 +65,14 @@ Material._update　= (req, res) => {
 Material._delete　= (req, res) => {
     let id = req.query.materialId;
     if(id){
-        MaterialModel.delete(id).then(data => {
-            return res.send({code: 0, data: data})
-        })
+        MaterialModel.get_one(id).then(result => {
+            let fileUrl = result.fileUrl;
+            rmFile(fileUrl, () => {
+                MaterialModel.delete(id).then(data => {
+                    return res.send({code: 0, data: data})
+                })
+            });
+        });
     }else {
         return res.send({code: 1, data: '缺少materialId参数'})
     }
@@ -151,6 +157,18 @@ function getPram(material, cb) {
     cb(pram);
 }
 
+
+//删除文件
+function rmFile(fileUrl, cb) {
+    fs.unlink('./public/' + fileUrl, function (err) {
+         if(err){
+             console.log(err);
+             return cb();
+         }
+         console.log('文件删除成功');
+         return cb();
+    })
+}
 
 router.get('/', Material._main);
 router.post('/_add', Material._add);　//添加一条媒体

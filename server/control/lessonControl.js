@@ -68,12 +68,13 @@ Lesson._find = (req, res) => {
     }
 
     let page = lessonInfo.page;
-    if(page){
-        LessonModel.get_all_file(pram, parseInt(page)).then(data => {
+    let num = lessonInfo.num;
+    if(page && num){
+        LessonModel.get_all_file(pram, parseInt(page), parseInt(num)).then(data => {
             return res.send({code :0, data: data});
         });
     }else {
-        return  res.send({code: 1, data: '缺少page参数'})
+        return  res.send({code: 1, data: '缺少参数'})
     }
 };
 
@@ -190,6 +191,42 @@ Lesson._getone = (req, res) => {
     }
 };
 
+Lesson._get_iword_public = (req, res) => {
+    let pram = {status: {$gte: 1}};
+    pram.category = 'iWord';
+
+    LessonModel.get_all_public(pram).then(data => {
+        return res.send({code: 0, data: data});
+    })
+};
+
+Lesson._get_italk_public = (req, res) => {
+    let pram = {status: {$gte: 1}};
+    pram.category = 'iTalk';
+
+    LessonModel.get_all_public(pram).then(data => {
+        return res.send({code: 0, data: data});
+    })
+};
+
+Lesson._get_ifun_public = (req, res) => {
+    let pram = {status: {$gte: 1}};
+    pram.category = 'iFun';
+
+    LessonModel.get_all_public(pram).then(data => {
+        return res.send({code: 0, data: data});
+    })
+};
+
+Lesson._get_ilisten_public = (req, res) => {
+    let pram = {status: {$gte: 1}};
+    pram.category = 'iListen';
+
+    LessonModel.get_all_public(pram).then(data => {
+        return res.send({code: 0, data: data});
+    })
+};
+
 router.post('/_add', Lesson._add);  //添加ieord类型的课程
 router.get('/_find', Lesson._find);  //根据条件分页获取课程
 router.get('/_getnum', Lesson._getnum); //根据条件获取课程的总数量
@@ -197,5 +234,10 @@ router.post('/_update', Lesson._update); //更新课程信息
 router.get('/_delete', Lesson._delete); //删除一个课程
 router.post('/_public', Lesson._public); //定时发布一个课程
 router.get('/_getone', Lesson._getone); //获取单个课程
+
+router.get('/iword/_public', Lesson._get_iword_public); //huichi接口的对接
+router.get('/italk/_public', Lesson._get_italk_public); //huichi接口的对接
+router.get('/ifun/_public', Lesson._get_ifun_public); //huichi接口的对接
+router.get('/ilisten/_public', Lesson._get_ilisten_public); //huichi接口的对接
 
 module.exports = router;
