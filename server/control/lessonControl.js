@@ -3,6 +3,7 @@ var router = express.Router();
 var fs = require('fs');
 var Promise = require('promise');
 var LessonModel = require('../model/lessonModel');
+var MaterialModel = require('../model/materialModel');
 
 let Lesson = {};
 
@@ -196,7 +197,11 @@ Lesson._get_iword_public = (req, res) => {
     pram.category = 'iWord';
 
     LessonModel.get_all_public(pram).then(data => {
-        return res.send({code: 0, data: data});
+        MaterialModel.get_one(data.materialId).then(result => {
+            data.materialId = result;
+            return res.send({code: 0, data: data});
+        });
+
     })
 };
 
@@ -205,7 +210,10 @@ Lesson._get_italk_public = (req, res) => {
     pram.category = 'iTalk';
 
     LessonModel.get_all_public(pram).then(data => {
-        return res.send({code: 0, data: data});
+        MaterialModel.get_one(data.materialId).then(result => {
+            data.materialId = result;
+            return res.send({code: 0, data: data});
+        });
     })
 };
 
@@ -214,7 +222,10 @@ Lesson._get_ifun_public = (req, res) => {
     pram.category = 'iFun';
 
     LessonModel.get_all_public(pram).then(data => {
-        return res.send({code: 0, data: data});
+        MaterialModel.get_one(data.materialId).then(result => {
+            data.materialId = result;
+            return res.send({code: 0, data: data});
+        });
     })
 };
 
@@ -223,7 +234,10 @@ Lesson._get_ilisten_public = (req, res) => {
     pram.category = 'iListen';
 
     LessonModel.get_all_public(pram).then(data => {
-        return res.send({code: 0, data: data});
+        MaterialModel.get_one(data.materialId).then(result => {
+            data.materialId = result;
+            return res.send({code: 0, data: data});
+        });
     })
 };
 
