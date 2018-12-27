@@ -179,7 +179,9 @@ Lesson._public = (req, res) => {
             return res.send({code: 1, data: '设定时间小于当前时间'})
         }else {
             let timeout = time - nowTime;
-            LessonModel.update_lesson({status: 1}, id).then(data => {
+            let pram = {status: 1};
+            pram.publicTime = time;
+            LessonModel.update_lesson(pram, id).then(data => {
                 setTimeout(() => {
                     LessonModel.update_lesson({status: 2}, id).then(data => {
                         console.log(id, '已发布');

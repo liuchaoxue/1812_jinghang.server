@@ -8,6 +8,7 @@ var Video = require('../util/webGetVideo');
 var Audio = require('../util/webGetAudio');
 var FileModel = require('../model/fileModel');
 var MaterialModel = require('../model/materialModel');
+var settings = require('../config/config');
 
 var Promise = require('promise');
 
@@ -85,7 +86,7 @@ File._upload = (req, res) => {
                 }
                 let pram = {
                     fileName: req.files[i].originalname,
-                    fileUrl: dest,
+                    fileUrl: settings.host + dest,
                     vvt: vvt,
                     source: 'upload'
                 };
