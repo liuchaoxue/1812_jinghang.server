@@ -10,6 +10,7 @@ var LessonSchema = new Schema({
     title: String,
     difficulty: String,
     category: String,  //类别（iword/italk）
+    class: String,
     publicTime: Number, //发布时间(十位数的时间戳)
     status: Number,
     stage:  Number,  //生成文章状态 0未生成，１已生成

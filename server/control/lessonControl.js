@@ -21,6 +21,9 @@ Lesson._add = (req, res) => {
         if(lessonInfo.category){
             pram.category = lessonInfo.category;
         }
+        if(lessonInfo.class){
+            pram.class = lessonInfo.class;
+        }
         if(lessonInfo.publicTime){
             pram.publicTime = lessonInfo.publicTime;
         }
@@ -57,6 +60,9 @@ Lesson._find = (req, res) => {
     }
     if(lessonInfo.category){
         pram.category = lessonInfo.category;
+    }
+    if(lessonInfo.class){
+        pram.class = lessonInfo.class;
     }
     if(lessonInfo.publicTime){
         pram.publicTime = lessonInfo.publicTime;
@@ -97,6 +103,9 @@ Lesson._getnum = (req, res) => {
     if(lessonInfo.category){
         pram.category = lessonInfo.category;
     }
+    if(lessonInfo.class){
+        pram.class = lessonInfo.class;
+    }
     if(lessonInfo.publicTime){
         pram.publicTime = lessonInfo.publicTime;
     }
@@ -132,6 +141,9 @@ Lesson._update = (req, res) => {
     }
     if(lessonInfo.category){
         pram.category = lessonInfo.category;
+    }
+    if(lessonInfo.class){
+        pram.class = lessonInfo.class;
     }
     if(lessonInfo.publicTime){
         pram.publicTime = lessonInfo.publicTime;
