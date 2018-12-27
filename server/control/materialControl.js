@@ -100,6 +100,9 @@ Material._create = (req, res) => {
         pram.category = info.category;
         pram.status = info.status;
         pram.stage = 1;
+        if(info.publicTime){
+            pram.publicTime = lessonInfo.publicTime;
+        }
         let newLesson = new LessonModel(pram);
         newLesson.save((err, data) => {
             if(err){
