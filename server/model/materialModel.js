@@ -4,7 +4,7 @@ var Schema = db.mongoose.Schema;
 var MaterialSchema = new Schema({
     fileId: {
         type: Schema.Types.ObjectId,
-        ref: 'files'
+        ref: 'File'
     },
     fileUrl: String,
     source: String,
@@ -32,7 +32,6 @@ var MaterialSchema = new Schema({
 //         type: Schema.Types.ObjectId,
 //             ref: 'files'
 //     },
-//     cms: String, //cms
 //     source: String, //来源（ewa）
 //     category: String, //类别（iword）
 //     enTitle: String, //英文标题

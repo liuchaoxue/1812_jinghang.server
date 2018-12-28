@@ -91,32 +91,62 @@ Material._getone = (req, res) => {
 
 Material._create = (req, res) => {
     let info = req.body;
-    if(info.materialId && info.zhTitle && info.category && info.status && info.difficulty){
-        let pram = {};
-        pram.cms = '# ' + info.zhTitle;
-        pram.materialId = info.materialId;
-        pram.title = info.zhTitle;
-        pram.difficulty = info.difficulty;
+    let pram = {};
+
+    if(info.category){
         pram.category = info.category;
-        pram.status = info.status;
-        pram.stage = 1;
-        if(info.publicTime){
-            pram.publicTime = lessonInfo.publicTime;
-        }
-        if(info.class){
-            pram.class = info.class;
-        }
-        let newLesson = new LessonModel(pram);
-        newLesson.save((err, data) => {
-            if(err){
-                console.log('========课程=====err:', err);
-                return res.send({code: 1, data: '添加课程失败: '+err});
-            }
-            return res.send({code: 0, data: data});
-        });
-    }else {
-        return res.send({code: 1, data: "缺少参数"});
     }
+    if(info.publicTime){
+        pram.publicTime = info.publicTime;
+    }
+    if(info.status){
+        pram.status = info.status;
+    }
+    if(info.stage){
+        pram.stage = info.stage;
+    }
+    if(info.zhTitle){
+        pram.title = info.zhTitle;
+    }
+    if(info.difficulty){
+        pram.difficulty = info.difficulty;
+    }
+    if(info.fun){
+        pram.fun = info.fun;
+    }
+    if(info.materialId){
+        pram.materialUrl = info.materialId;
+    }else {
+        return res.send({code: 1, data: "缺少materialId参数"});
+    }
+
+    let newLesson = new LessonModel(pram);
+    newLesson.save((err, data) => {
+        if(err){
+            return res.send({code: 1, data: '添加课程失败: '+err});
+        }
+        return res.send({code: 0, data: data});
+    });
+
+    // if(info.materialId && info.zhTitle && info.category && info.status && info.difficulty){
+    //     let pram = {};
+    //     pram.cms = '# ' + info.zhTitle;
+    //     pram.materialId = info.materialId;
+    //     pram.title = info.zhTitle;
+    //     pram.difficulty = info.difficulty;
+    //     pram.category = info.category;
+    //     pram.status = info.status;
+    //     pram.stage = 1;
+    //     if(info.publicTime){
+    //         pram.publicTime = lessonInfo.publicTime;
+    //     }
+    //     if(info.class){
+    //         pram.class = info.class;
+    //     }
+    //
+    // }else {
+    //     return res.send({code: 1, data: "缺少参数"});
+    // }
 };
 
 //创建＆筛选获取参数
