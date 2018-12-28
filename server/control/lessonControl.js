@@ -201,7 +201,7 @@ Lesson._public = (req, res) => {
                     LessonModel.update_lesson({status: 2}, id).then(data => {
                         console.log(id, '已发布');
                     })
-                }, timeout);
+                }, timeout * 1000);
                 return res.send({code: 0, data: data})
             })
         }
