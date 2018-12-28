@@ -240,9 +240,21 @@ Lesson._get_italk_public = (req, res) => {
 
 Lesson._get_ifun_public = (req, res) => {
     let category = 'iFun';
-    getPublic(req, res, category, (data) => {
-        return res.send(data);
-    })
+    let pram = {status: {$gte: 1}};
+    pram.category = category;
+
+    if(req.query.startTime && req.query.endTime){
+        let startTime = req.query.startTime;
+        let endTime = req.query.endTime;
+
+        pram.publicTime = {$gt: parseInt(startTime), $lt: parseInt(endTime)};
+
+        LessonModel.get_all_pop(pram).then(data => {
+            res.send({code: 0, data: data});
+        });
+    }else {
+        return cb({code: 1, data: '缺少时间参数'});
+    }
 };
 
 Lesson._get_ilisten_public = (req, res) => {
