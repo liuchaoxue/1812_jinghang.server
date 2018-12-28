@@ -264,6 +264,27 @@ Lesson._get_ilisten_public = (req, res) => {
     })
 };
 
+Lesson.get_daily_word_public　= (req, res) => {
+    let pram = {status: {$gte: 1}};
+    pram.category = 'iWord';
+    pram.class = 'dailyWord';
+
+    if(req.query.startTime && req.query.endTime){
+        let startTime = req.query.startTime;
+        let endTime = req.query.endTime;
+
+        pram.publicTime = {$gt: parseInt(startTime), $lt: parseInt(endTime)};
+        try{
+            LessonModel.get_all_public(pram).then(data => {
+                return res.send({code: 0, data: data});
+            })
+        }catch (err){
+            return res.send({code: 1, data: '当前无该类型已发布课程'});
+        }
+    }else {
+        return res.send({code: 1, data: '缺少时间参数'});
+    }
+};
 
 function getPublic(req, res, category, cb) {
     let pram = {status: {$gte: 1}};
@@ -312,5 +333,7 @@ router.get('/iword/_public', Lesson._get_iword_public); //huichi接口的对接
 router.get('/italk/_public', Lesson._get_italk_public); //huichi接口的对接
 router.get('/ifun/_public', Lesson._get_ifun_public); //huichi接口的对接
 router.get('/ilisten/_public', Lesson._get_ilisten_public); //huichi接口的对接
+
+router.get('/daily_word/_public', Lesson.get_daily_word_public); //huichi接口对接
 
 module.exports = router;
