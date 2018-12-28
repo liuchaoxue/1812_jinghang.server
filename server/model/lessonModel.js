@@ -31,7 +31,9 @@ var LessonSchema = new Schema({
 
 //获取所有课程
 LessonSchema.statics.get_all_file = function (options, page, num) {
-    return this.find(options).skip((page-1)*num).limit(num).sort({updateTime:-1}).exec();
+    return this.find(options)
+        .populate('materialId')
+        .skip((page-1)*num).limit(num).sort({updateTime:-1}).exec();
 };
 
 //获取所有已发布
@@ -60,10 +62,9 @@ LessonSchema.statics.get_one = function (id) {
 };
 
 //关联查询（fileUrl，英文标题enTitle，中文字幕zhVvt，英文字幕enVvt，摘要abstract, label）
-LessonSchema.statics.get_all_pop = function (options, page, num) {
+LessonSchema.statics.get_all_pop = function (options) {
     return this.find(options)
         .populate('materialId')
-        .skip((page-1)*num).limit(num).sort({updateTime:-1})
         .exec();
 };
 
