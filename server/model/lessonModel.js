@@ -58,14 +58,16 @@ LessonSchema.statics.update_lesson = function (options, id) {
 
 //根据id获取一个课程
 LessonSchema.statics.get_one = function (id) {
-    return this.findOne({_id: id}).exec();
+    return this.findOne({_id: id})
+        .populate('materialId')
+        .exec();
 };
 
 //关联查询（fileUrl，英文标题enTitle，中文字幕zhVvt，英文字幕enVvt，摘要abstract, label）
 LessonSchema.statics.get_all_pop = function (options) {
     return this.find(options)
         .populate('materialId')
-        .exec();
+        .sort({updateTime:-1}).exec();
 };
 
 module.exports = db.conn.model('Lesson', LessonSchema);
