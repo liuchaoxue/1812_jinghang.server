@@ -57,7 +57,9 @@ MaterialSchema.statics.get_all_num = function (options) {
 
 //根据id获取一条数据
 MaterialSchema.statics.get_one = function (id) {
-    return this.findOne({_id: id}).exec();
+    return this.findOne({_id: id})
+        .populate('fileId')
+        .exec();
 };
 
 //删除
