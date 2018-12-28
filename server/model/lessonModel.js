@@ -63,6 +63,7 @@ LessonSchema.statics.get_one = function (id) {
 LessonSchema.statics.get_all_pop = function (options, page, num) {
     return this.find(options)
         .populate('materialId')
+        .skip((page-1)*num).limit(num).sort({updateTime:-1})
         .exec();
 };
 

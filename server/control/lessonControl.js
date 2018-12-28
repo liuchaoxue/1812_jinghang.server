@@ -16,7 +16,7 @@ Lesson._add = (req, res) => {
         pram.title = lessonInfo.zhTitle;
 
         if(lessonInfo.materialId){
-            pram.materialUrl = lessonInfo.materialUrl;
+            pram.materialId = lessonInfo.materialId;
         }
         if(lessonInfo.category){
             pram.category = lessonInfo.category;
@@ -143,7 +143,7 @@ function getPram(lessonInfo, pram, cb) {
         pram.cms = lessonInfo.cms;
     }
     if(lessonInfo.materialId){
-        pram.materialUrl = lessonInfo.materialId;
+        pram.materialId = lessonInfo.materialId;
     }
     if(lessonInfo.category){
         pram.category = lessonInfo.category;

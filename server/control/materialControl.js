@@ -111,11 +111,11 @@ Material._create = (req, res) => {
     if(info.difficulty){
         pram.difficulty = info.difficulty;
     }
-    if(info.fun){
-        pram.fun = info.fun;
+    if(info.class){
+        pram.class = info.class;
     }
     if(info.materialId){
-        pram.materialUrl = info.materialId;
+        pram.materialId = info.materialId;
     }else {
         return res.send({code: 1, data: "缺少materialId参数"});
     }
