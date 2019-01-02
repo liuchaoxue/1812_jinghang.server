@@ -50,9 +50,13 @@ Material._getnum = (req, res) => {
 
 Material._update　= (req, res) => {
     let materialInfo = req.body;
+
     getPram(materialInfo, (result) => {
         let id = materialInfo.materialId;
         if(id){
+            if(materialInfo.label){
+                result.label = materialInfo.label.split(',');
+            }
             MaterialModel.update_material(result, id).then((data) => {
                 return res.send({code: 0, data: data})
             })

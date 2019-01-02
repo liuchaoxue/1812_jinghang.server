@@ -6,7 +6,7 @@ let LabelModel = require('../model/labelModel');
 
 let Label = {};
 
-Label.create = (req , res) => {
+Label._create = (req , res) => {
     let labelInfo = req.body;
     if(labelInfo.label && labelInfo.category){
         let pram = {};
@@ -45,7 +45,7 @@ Label.find_by_category = (req, res) => {
     });
 };
 
-router.post('/_add', Label.create); //添加一个带有分类的标签 通用标签分类为all
-router.get('/_find', Label.find_by_category); //通过分类查询标签
+router.post('/_add', Label._create); //
+router.get('/_find', Label.find_by_category); //
 
 module.exports = router;

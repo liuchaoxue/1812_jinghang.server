@@ -3,6 +3,7 @@ var router = express.Router();
 var fs = require('fs');
 var Promise = require('promise');
 var LessonModel = require('../model/lessonModel');
+var FunModel = require('../model/funModel');
 var MaterialModel = require('../model/materialModel');
 
 let Lesson = {};
@@ -249,11 +250,11 @@ Lesson._get_ifun_public = (req, res) => {
 
         pram.publicTime = {$gt: parseInt(startTime), $lt: parseInt(endTime)};
 
-        LessonModel.get_all_pop(pram).then(data => {
+        FunModel.get_all_pop(pram).then(data => {
             res.send({code: 0, data: data});
         });
     }else {
-        return cb({code: 1, data: '缺少时间参数'});
+        return res({code: 1, data: '缺少时间参数'});
     }
 };
 
