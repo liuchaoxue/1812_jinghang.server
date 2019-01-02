@@ -45,7 +45,6 @@ var MaterialSchema = new Schema({
 //     status: Number  //发布状态：０未发布，１待发布，２已发布
 // }
 
-//todo add，有关label字段的更新
 //分页获取筛选条件下的所有文件
 MaterialSchema.statics.get_all_file = function (options, page, num) {
     return this.find(options).skip((page-1)*num).limit(num).sort({updateTime:-1}).exec();

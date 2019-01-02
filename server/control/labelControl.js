@@ -45,7 +45,7 @@ Label.find_by_category = (req, res) => {
     });
 };
 
-router.post('/_add', Label._create); //
+router.post('/_add', Label._create); //创建一个带分类的标签，all为共有标签
 router.get('/_find', Label.find_by_category); //
 
 module.exports = router;
