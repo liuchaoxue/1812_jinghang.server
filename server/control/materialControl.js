@@ -58,15 +58,18 @@ Material._update　= (req, res) => {
             if(materialInfo.label){
 
                 console.log(materialInfo.label);
-                console.log(JSON.parse(materialInfo.label));
-                result.label = JSON.parse(materialInfo.label);
-
-                console.log('-----------');
-
+                try{
+                    result.label = JSON.parse(materialInfo.label);
+                }catch (e) {
+                    return res.send({code: 0, data: e})
+                }
             }
+
             MaterialModel.update_material(result, id).then((data) => {
                 return res.send({code: 0, data: data})
             })
+
+
         }else {
             return res.send({code: 1, data: '缺少materialId参数'})
         }

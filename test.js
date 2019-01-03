@@ -2,4 +2,5 @@ var fs = require('fs');
 var path = require('path');
 
 
-fs.mkdirSync('./server/data/ted/test');
+let str = '["wang", "yong", "fei"]';
+console.log(JSON.parse(str)[0]);
