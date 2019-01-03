@@ -59,7 +59,10 @@ Material._update　= (req, res) => {
 
                 console.log(materialInfo.label);
                 try{
-                    result.label = JSON.parse(materialInfo.label);
+                    let label = materialInfo.label;
+                    console.log(JSON.parse(label)[0]);
+
+                    result.label = JSON.parse(label);
                 }catch (e) {
                     return res.send({code: 1, data: e})
                 }
