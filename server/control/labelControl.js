@@ -13,12 +13,19 @@ Label._create = (req , res) => {
         pram.label = labelInfo.label;
         pram.category = labelInfo.category;
 
-        let newLabel = new LabelModel(pram);
-        newLabel.save((err, data) => {
-            if(err){
-                return res.send({code: 1, data: '添加标签失败：' + err})
+        LabelModel.get_all_label(pram).then(result => {
+            console.log(result);
+            if(result.length > 0){
+                return res.send({code: 1, data: '该类型的标签已经存在'})
             }
-            return res.send({code: 0, data: data});
+
+            let newLabel = new LabelModel(pram);
+            newLabel.save((err, data) => {
+                if(err){
+                    return res.send({code: 1, data: '添加标签失败：' + err})
+                }
+                return res.send({code: 0, data: data});
+            });
         });
     }else {
         return res.send({code: 1, data: '缺少参数'});
