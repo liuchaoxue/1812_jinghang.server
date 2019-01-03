@@ -56,7 +56,7 @@ Material._update　= (req, res) => {
         let id = materialInfo.materialId;
         if(id){
             if(materialInfo.label){
-                result.label = materialInfo.label.split(',');
+                result.label = JSON.parse(materialInfo.label);
             }
             MaterialModel.update_material(result, id).then((data) => {
                 return res.send({code: 0, data: data})
