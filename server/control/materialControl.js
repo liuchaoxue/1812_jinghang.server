@@ -61,7 +61,7 @@ Material._update　= (req, res) => {
                 try{
                     result.label = JSON.parse(materialInfo.label);
                 }catch (e) {
-                    return res.send({code: 0, data: e})
+                    return res.send({code: 1, data: e})
                 }
             }
 
