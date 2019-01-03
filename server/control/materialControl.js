@@ -4,6 +4,7 @@ var fs = require('fs');
 var Promise = require('promise');
 var MaterialModel = require('../model/materialModel');
 var LessonModel = require('../model/lessonModel');
+var FunModel = require('../model/funModel');
 
 let Material = {};
 
@@ -96,10 +97,8 @@ Material._getone = (req, res) => {
 Material._create = (req, res) => {
     let info = req.body;
     let pram = {};
+    let newLesson;
 
-    if(info.category){
-        pram.category = info.category;
-    }
     if(info.publicTime){
         pram.publicTime = info.publicTime;
     }
@@ -124,7 +123,18 @@ Material._create = (req, res) => {
         return res.send({code: 1, data: "缺少materialId参数"});
     }
 
-    let newLesson = new LessonModel(pram);
+    if(info.category){
+        pram.category = info.category;
+
+        if(info.category == 'iFun'){
+            newLesson = new FunModel(pram);
+        }
+    }
+    else {
+        return res.send({code: 1, data: "缺少category参数"});
+    }
+
+    // let newLesson = new LessonModel(pram);
     newLesson.save((err, data) => {
         if(err){
             return res.send({code: 1, data: '添加课程失败: '+err});
