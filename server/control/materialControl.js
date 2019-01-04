@@ -5,6 +5,7 @@ var Promise = require('promise');
 var MaterialModel = require('../model/materialModel');
 var LessonModel = require('../model/lessonModel');
 var FunModel = require('../model/funModel');
+var TalkModel = require('../model/talkModel');
 
 let Material = {};
 
@@ -139,6 +140,9 @@ Material._create = (req, res) => {
 
         if(info.category == 'iFun'){
             newLesson = new FunModel(pram);
+        }
+        if(info.category == 'iTalk'){
+            newLesson = new TalkModel(pram);
         }
     }
     else {
