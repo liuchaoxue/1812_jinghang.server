@@ -41,7 +41,7 @@ File.ted_handle = (req, res) => {
     res.send({code: 0, data: "成功访问回调post接口"})
 };
 
-File.bbc_handel = (req, res) => {
+File.bbc_handle = (req, res) => {
     let audioInfo = JSON.parse(req.body.data);
     // let audioInfo = {
     //     "title":"时间胶囊 Time capsules",
@@ -120,6 +120,61 @@ File._upload = (req, res) => {
     });
 };
 
+
+File.ewa_handle = (req, res) => {
+    let promiseArr = [];
+    let info = req.body;
+    for(let i=0;i<req.files.length;i++){
+        let promise = new Promise((resolve) => {
+            let nameArr = req.files[i].originalname.split('.');
+            let format = nameArr[nameArr.length - 1];
+            let fileUuid = UUID.v1();
+            let dest = path.join('data', 'ewa', fileUuid + '.' +  format);
+            fs.rename(req.files[i].path, './public/' + dest, (err) => {
+                if(err) {
+                    console.log(err);
+                    return resolve(err);
+                }
+                let pram = {
+                    fileName: req.files[i].originalname,
+                    fileUrl: settings.host + dest,
+                    source: 'ewa'
+                };
+                console.log(pram);
+                let newFile = new FileModel(pram);
+                newFile.save(function (err, data) {
+
+                    if(err){
+                        return console.log('错误:'+ err)
+                    }
+
+                    let options = {
+                        fileId: data._id,
+                        fileUrl: data.fileUrl,
+                        source: 'ewa',
+                        zhTitle: info.title,
+                        enVvt: info.enVvt,
+                        zhVvt: info.zhVvt,
+                        enVvtLen: info.enVvtLen,
+                        zhVvtLen: info.zhVvtLen,
+                        difficulty: info.difficulty
+                    };
+
+                    let newMaterial = new MaterialModel(options);
+                    newMaterial.save((err, result) => {
+                        return resolve({file: data, material: result});
+                    });
+                });
+            })
+        });
+        promiseArr.push(promise);
+    }
+    Promise.all(promiseArr).then((data) => {
+        console.log('文件上传完成', data);
+        res.send({code: 0, data: data});
+    });
+};
+
 File._getall = (req, res) => {
     FileModel.get_all_file().then((data) => {
         res.send({code: 0, data: data});
@@ -181,9 +236,11 @@ function loadingTedVideo(videoInfo, id) {
 
 router.get('/', File._main);
 router.post('/ted/_handel', File.ted_handle); //处理web ted来源的文件
-router.post('/bbc/_handel', File.bbc_handel); //处理bbc来源文件
+router.post('/bbc/_handel', File.bbc_handle); //处理bbc来源文件
 router.post('/_upload', File._upload); //上传媒体文件
 router.get('/_getall', File._getall); //获取所有上传文件
 router.get('/_getone', File._getone); //获取单个ｆｉｌｅ文件
+
+router.post('/ewa/_handel', File.ewa_handle); //获取ewa视频
 
 module.exports = router;

@@ -15,6 +15,8 @@ var MaterialSchema = new Schema({
     label: Array,
     enVvt: String,
     zhVvt: String,
+    enVvtLen: Number,
+    zhVvtLen: Number,
     class: String,
     difficulty: String,
     createTime: {
