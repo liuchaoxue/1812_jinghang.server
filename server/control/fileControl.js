@@ -152,7 +152,7 @@ File.ewa_handle = (req, res) => {
                         fileId: data._id,
                         fileUrl: data.fileUrl,
                         source: 'ewa',
-                        zhTitle: info.title,
+                        zhTitle: info.zhTitle,
                         enVvt: info.enVvt,
                         zhVvt: info.zhVvt,
                         enVvtLen: info.enVvtLen,
@@ -239,7 +239,7 @@ router.post('/ted/_handel', File.ted_handle); //处理web ted来源的文件
 router.post('/bbc/_handel', File.bbc_handle); //处理bbc来源文件
 router.post('/_upload', File._upload); //上传媒体文件
 router.get('/_getall', File._getall); //获取所有上传文件
-router.get('/_getone', File._getone); //获取单个ｆｉｌｅ文件
+router.get('/_getone', File._getone); //获取单个file文件
 
 router.post('/ewa/_handel', File.ewa_handle); //获取ewa视频
 

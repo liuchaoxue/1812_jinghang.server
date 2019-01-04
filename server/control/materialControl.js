@@ -156,26 +156,31 @@ Material._create = (req, res) => {
         }
         return res.send({code: 0, data: data});
     });
+};
 
-    // if(info.materialId && info.zhTitle && info.category && info.status && info.difficulty){
-    //     let pram = {};
-    //     pram.cms = '# ' + info.zhTitle;
-    //     pram.materialId = info.materialId;
-    //     pram.title = info.zhTitle;
-    //     pram.difficulty = info.difficulty;
-    //     pram.category = info.category;
-    //     pram.status = info.status;
-    //     pram.stage = 1;
-    //     if(info.publicTime){
-    //         pram.publicTime = lessonInfo.publicTime;
-    //     }
-    //     if(info.class){
-    //         pram.class = info.class;
-    //     }
-    //
-    // }else {
-    //     return res.send({code: 1, data: "缺少参数"});
-    // }
+Material._find_by_vvtlen = (req, res) => {
+    let materialInfo = req.query;
+
+    let pram = {};
+    if(materialInfo.category){
+        pram.category = materialInfo.category;
+    }
+    if(materialInfo.enVvtLen){
+        pram.enVvtLen = {$lte: parseInt(materialInfo.enVvtLen)};
+    }
+    if(materialInfo.zhVvtLen){
+        pram.zhVvtLen = {$lte: parseInt(materialInfo.zhVvtLen)};
+    }
+
+    let page = materialInfo.page;
+    let num = materialInfo.num;
+    if(page && num){
+        MaterialModel.get_all_file(pram, parseInt(page), parseInt(num)).then((data) => {
+            return res.send({code: 0, data: data});
+        })
+    }else {
+        return res.send({code: 1, data: "缺少page或者num参数"});
+    }
 };
 
 //创建＆筛选获取参数
@@ -218,6 +223,12 @@ function getPram(material, cb) {
     if(material.difficulty){
         pram.difficulty = material.difficulty;
     }
+    if(material.enVvtLen){
+        pram.enVvtLen = info.enVvtLen;
+    }
+    if(material.zhVvtLen){
+        pram.zhVvtLen = info.zhVvtLen;
+    }
 
     cb(pram);
 }
@@ -243,6 +254,8 @@ router.post('/_update', Material._update); //更新媒体信息
 router.get('/_delete', Material._delete); //删除一条媒体数据
 router.get('/_getone', Material._getone); //根据id获取一条媒体数据
 router.post('/_createCMS', Material._create); //生成cms文章
+
+router.get('/_find_vvtlen', Material._find_by_vvtlen); //通过字幕长度查询
 
 
 module.exports = router;

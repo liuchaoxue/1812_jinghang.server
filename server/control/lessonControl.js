@@ -4,6 +4,7 @@ var fs = require('fs');
 var Promise = require('promise');
 var LessonModel = require('../model/lessonModel');
 var FunModel = require('../model/funModel');
+var TalkModel = require('../model/talkModel');
 var MaterialModel = require('../model/materialModel');
 
 let Lesson = {};
@@ -233,10 +234,22 @@ Lesson._get_iword_public = (req, res) => {
 };
 
 Lesson._get_italk_public = (req, res) => {
-    let category = 'iTalk';
-    getPublic(req, res, category, (data) => {
-        return res.send(data);
-    })
+    let category = 'iFun';
+    let pram = {status: {$gte: 1}};
+    pram.category = category;
+
+    if(req.query.startTime && req.query.endTime){
+        let startTime = req.query.startTime;
+        let endTime = req.query.endTime;
+
+        pram.publicTime = {$gt: parseInt(startTime), $lt: parseInt(endTime)};
+
+        TalkModel.get_all_pop(pram).then(data => {
+            res.send({code: 0, data: data});
+        });
+    }else {
+        return res({code: 1, data: '缺少时间参数'});
+    }
 };
 
 Lesson._get_ifun_public = (req, res) => {
