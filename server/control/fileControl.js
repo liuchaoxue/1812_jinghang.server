@@ -152,6 +152,7 @@ File.ewa_handle = (req, res) => {
                         fileId: data._id,
                         fileUrl: data.fileUrl,
                         source: 'ewa',
+                        category: info.category,
                         zhTitle: info.zhTitle,
                         enVvt: info.enVvt,
                         zhVvt: info.zhVvt,
