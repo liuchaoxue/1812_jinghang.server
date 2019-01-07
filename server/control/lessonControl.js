@@ -234,7 +234,7 @@ Lesson._get_iword_public = (req, res) => {
 };
 
 Lesson._get_italk_public = (req, res) => {
-    let category = 'iFun';
+    let category = 'iTalk';
     let pram = {status: {$gte: 1}};
     pram.category = category;
 
