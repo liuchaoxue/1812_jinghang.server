@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
+    "dataformat": "^1.0.0",
     "debug": "~2.6.9",
     "download": "^7.1.0",
     "ejs": "^2.6.1",
@@ -18,5 +19,8 @@
     "node-uuid": "^1.4.8",
     "pug": "2.0.0-beta11",
     "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "qcloud-upload": "^1.4.0"
   }
 }
