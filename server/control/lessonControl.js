@@ -245,18 +245,21 @@ Lesson._get_italk_public = (req, res) => {
         pram.publicTime = {$gt: parseInt(startTime), $lt: parseInt(endTime)};
 
         TalkModel.get_all_pop(pram).then(data => {
-            if(data.difficulty == 'simple'){
-                data.difficulty = 0;
+            for(let i=0;i<data.length;i++){
+                let result = data[i];
+                if(result.difficulty == 'simple'){
+                    result.difficulty = 0;
 
-            }else if(data.difficulty == 'easily'){
-                data.difficulty = 1;
+                }else if(result.difficulty == 'easily'){
+                    result.difficulty = 1;
 
-            }else if(data.difficulty == 'difficulty'){
-                data.difficulty = 2;
+                }else if(result.difficulty == 'difficulty'){
+                    result.difficulty = 2;
 
-            }else {
-                data.difficulty = 3;
+                }else {
+                    result.difficulty = 3;
 
+                }
             }
             res.send({code: 0, data: data});
         });
