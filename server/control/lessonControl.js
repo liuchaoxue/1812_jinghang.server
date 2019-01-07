@@ -247,19 +247,17 @@ Lesson._get_italk_public = (req, res) => {
         TalkModel.get_all_pop(pram).then(data => {
             if(data.difficulty == 'simple'){
                 data.difficulty = 0;
-                data.materialId.difficulty = 0;
+
             }else if(data.difficulty == 'easily'){
                 data.difficulty = 1;
-                data.materialId.difficulty = 1;
+
             }else if(data.difficulty == 'difficulty'){
                 data.difficulty = 2;
-                data.materialId.difficulty = 2;
+
             }else {
                 data.difficulty = 3;
-                data.materialId.difficulty = 3;
+
             }
-
-
             res.send({code: 0, data: data});
         });
     }else {
