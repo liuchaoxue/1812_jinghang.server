@@ -40,6 +40,9 @@ FunSchema.statics.get_all_file = function (options, page, num) {
 FunSchema.statics.get_all_public = function (options, page, num) {
     return this.find(options).sort({updateTime:-1}).exec();
 };
+FunSchema.statics.get_need_public_fun = function(time){
+    return this.find({publicTime :{'$lte': time}, status: {'$ne': 2}}).exec(); //todo 状态确认
+};
 
 //获取所有课程数量
 FunSchema.statics.get_all_num = function (options) {
