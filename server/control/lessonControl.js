@@ -69,11 +69,11 @@ Lesson._find = (req, res) => {
     // let page = lessonInfo.page;
     // let num = lessonInfo.num;
     // if(page && num){
-    //     LessonModel.get_all_file(pram, parseInt(page), parseInt(num)).then(data => {
-    //         return res.send({code :0, data: data});
+    //     LessonModel.get_all_file(pram, parseInt(page), parseInt(num)).then(datas => {
+    //         return res.send({code :0, datas: datas});
     //     });
     // }else {
-    //     return  res.send({code: 1, data: '缺少参数'})
+    //     return  res.send({code: 1, datas: '缺少参数'})
     // }
 };
 
@@ -131,11 +131,11 @@ Lesson._update = (req, res) => {
     // }
 
     // if(lessonInfo.lessonId){
-    //     LessonModel.update_lesson(pram, lessonInfo.lessonId).then(data => {
-    //         return res.send({code: 0, data: data});
+    //     LessonModel.update_lesson(pram, lessonInfo.lessonId).then(datas => {
+    //         return res.send({code: 0, datas: datas});
     //     })
     // }else {
-    //     return res.send({code: 1, data: '缺少lessonId参数'})
+    //     return res.send({code: 1, datas: '缺少lessonId参数'})
     // }
 };
 

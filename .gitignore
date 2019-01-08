@@ -3,3 +3,4 @@ node_modules/
 .test.js
 public/data/upload/*
 public/fillStage/*
+server/config/config.js

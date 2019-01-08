@@ -78,8 +78,8 @@ File._upload = (req, res) => {
             let nameArr = req.files[i].originalname.split('.');
             let format = nameArr[nameArr.length - 1];
             let fileUuid = UUID.v1();
-            let dest = path.join('data', 'upload', fileUuid + '.' +  format);
-            fs.rename(req.files[i].path, './public/' + dest, (err) => {
+            let dest = path.join('media', fileUuid + '.' +  format);
+            fs.rename(req.files[i].path, '../' + dest, (err) => {
                 if(err) {
                     console.log(err);
                     return resolve(err);

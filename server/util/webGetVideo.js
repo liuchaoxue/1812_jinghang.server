@@ -1,6 +1,6 @@
 const  {exec } = require('child_process');
 
-let videoPath = './public/data/ted/';
+let videoPath = './public/datas/ted/';
 
 let Video = {};
 

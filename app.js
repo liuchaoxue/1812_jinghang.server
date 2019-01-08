@@ -6,7 +6,7 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var routers = require('./server/config/router');
 var multer  = require('multer');
-var upload = multer({ dest: './public/fileStage'});
+var upload = multer({ dest: '../fileStage'});
 var task = require('./server/task/release');
 
 var app = express();
@@ -42,7 +42,7 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// task.run();
+task.run();
 
 // error handler
 app.use(function(err, req, res, next) {

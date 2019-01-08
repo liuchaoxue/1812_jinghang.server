@@ -12,6 +12,7 @@ Task.status = {time: new Date(), status: 0};
 
 Task.release_all_lesson = () => {
     lessonModel.get_need_public_lesson().then(lessonList => {
+        console.log(lessonList)
         return Promise.all(lessonList.map(lesson => Task.release_one_lesson(lesson)))
     })
 };
@@ -25,7 +26,7 @@ Task.release_one_lesson = (lesson) => {
     })).then(() => {
 
         //
-        // lessonModel.update_lesson({status: 2}, lesson._id).then(data => {
+        // lessonModel.update_lesson({status: 2}, lesson._id).then(datas => {
         //     console.log(lesson._id, '已发布');
         // })
     }) //todo 上传失败

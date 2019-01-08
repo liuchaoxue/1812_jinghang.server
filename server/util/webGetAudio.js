@@ -1,6 +1,6 @@
 const  {exec } = require('child_process');
 
-let audioPath = './public/data/bbc/';
+let audioPath = './public/datas/bbc/';
 
 let Audio = {};
 
