@@ -224,10 +224,10 @@ function getPram(material, cb) {
         pram.difficulty = material.difficulty;
     }
     if(material.enVvtLen){
-        pram.enVvtLen = info.enVvtLen;
+        pram.enVvtLen = material.enVvtLen;
     }
     if(material.zhVvtLen){
-        pram.zhVvtLen = info.zhVvtLen;
+        pram.zhVvtLen = material.zhVvtLen;
     }
 
     cb(pram);
