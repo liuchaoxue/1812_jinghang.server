@@ -11,7 +11,13 @@ var cos = new COS({
 function qcloudUpload(localFile, className, fileType) {
     return new Promise((resolve, reject) => {
         let fileName = path.basename(localFile);
-        let keyPrefix = "/ispace/"+ className +"/"+ fileType +"/" + dateformat(new Date(), "yyyymmdd") + "/";
+        let info = localFile.split('/')
+        info.pop();
+        info.shift();
+        info[0]='';
+        let url = '/'+ info.join('/')+'/';
+        let keyPrefix = url ;
+        // "/ispace/"+ className +"/"+ fileType +"/" + dateformat(new Date(), "yyyymmdd") + "/";
         cos.sliceUploadFile(
             {
                 Bucket: "mediacenter-1255803335",

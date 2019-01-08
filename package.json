@@ -8,6 +8,7 @@
   "dependencies": {
     "cookie-parser": "~1.4.3",
     "dataformat": "^1.0.0",
+    "dateformat": "^3.0.3",
     "debug": "~2.6.9",
     "download": "^7.1.0",
     "ejs": "^2.6.1",

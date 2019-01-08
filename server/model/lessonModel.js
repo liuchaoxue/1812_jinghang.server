@@ -36,6 +36,12 @@ LessonSchema.statics.get_all_file = function (options, page, num) {
         .skip((page-1)*num).limit(num).sort({updateTime:-1}).exec();
 };
 
+//获取待发布课程
+LessonSchema.statics.get_need_public_lesson = function(time){
+    return this.find({status: {'$ne': 2}}).exec(); //todo 状态确认
+};
+
+
 //获取所有已发布
 LessonSchema.statics.get_all_public = function (options, page, num) {
     return this.find(options).sort({updateTime:-1}).exec();
