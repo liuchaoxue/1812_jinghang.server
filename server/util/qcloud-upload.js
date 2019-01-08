@@ -12,11 +12,9 @@ var cos = new COS({
 });
 function qcloudUpload(localFile,) {
     return new Promise((resolve, reject) => {
-
         materialModel.findByUrl(localFile).then(material=>{
             if(material.cdnUrl) return resolve();
             localFile = localFile.replace(config.host, config.filepath.replace('media/',''));
-            console.log(localFile)
             let fileName = path.basename(localFile);
             let keyPrefix = "/ispace/media/" + dateformat(new Date(), "yyyymmdd") + "/";
             cos.sliceUploadFile(
@@ -31,7 +29,7 @@ function qcloudUpload(localFile,) {
                         reject(err);
                     } else {
                         console.log(data.Location)
-                        materialModel.update_material({cdnUrl: data.Location },material._id).then(()=>{
+                        materialModel.update_material({cdnUrl: "http://"+data.Location },material._id).then(()=>{
                             resolve(data);
                         }) //todo
 

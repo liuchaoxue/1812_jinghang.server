@@ -42,7 +42,7 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-task.run();
+// task.run();
 
 // error handler
 app.use(function(err, req, res, next) {

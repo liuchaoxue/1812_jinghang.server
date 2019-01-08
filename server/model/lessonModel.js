@@ -38,7 +38,7 @@ LessonSchema.statics.get_all_file = function (options, page, num) {
 
 //获取待发布课程
 LessonSchema.statics.get_need_public_lesson = function(time){
-    return this.find({status: {'$ne': 2}}).exec(); //todo 状态确认
+    return this.find({status: {'$ne': 2}, publicTime: {"$lte": time}}).exec(); //todo 状态确认
 };
 
 
