@@ -12,19 +12,18 @@ Task.status = {time: new Date(), status: 0};
 
 Task.release_all_lesson = () => {
     lessonModel.get_need_public_lesson().then(lessonList => {
-        console.log('==============sdf')
-        console.log(lessonList)
-            return Promise.all(lessonList.map(lesson=> Task.release_one_lesson(lesson)))
+        return Promise.all(lessonList.map(lesson => Task.release_one_lesson(lesson)))
     })
 };
 Task.release_one_lesson = (lesson) => {
     let fileList = [];
-    let audioList = lesson.cms.match(/!+\[audio]\(([^)]*)\)/gi)||[];
-    let videoList = lesson.cms.match(/!+\[video]\(([^)]*)\)/gi)||[];
-    fileList = fileList.concat(audioList).concat(videoList).map(file=> file.split(/\(|\)/)[1].replace('fttp:','./public'))
-    Promise.all(fileList.map(file=>{
+    let audioList = lesson.cms.match(/!+\[audio]\(([^)]*)\)/gi) || [];
+    let videoList = lesson.cms.match(/!+\[video]\(([^)]*)\)/gi) || [];
+    Promise.all(fileList)
+    Promise.all(fileList.map(file => {
         return qcloudUpload(file)
-    })).then(()=>{
+    })).then(() => {
+
         //
         // lessonModel.update_lesson({status: 2}, lesson._id).then(data => {
         //     console.log(lesson._id, '已发布');
@@ -32,11 +31,10 @@ Task.release_one_lesson = (lesson) => {
     }) //todo 上传失败
 
 
-
 };
 
 Task.upload_cdn = (filelist) => {
-    let allPromises = filelist.map(file=>{
+    let allPromises = filelist.map(file => {
         return qcloudUpload(file)
     });
     return Promise.all(allPromises)
@@ -56,7 +54,7 @@ Task.hadRunTask = () => {
 Task.run = () => {
     setInterval(() => {
         let hadRunTask = Task.hadRunTask();
-        console.log('=============state==='+hadRunTask)
+        console.log('=============state===' + hadRunTask)
 
         if (!hadRunTask) {
             Task.release_all_lesson();
