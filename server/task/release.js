@@ -12,12 +12,12 @@ function Task() {
 
 Task.currentTime = '';
 
-Task.currentTime1 = new Date('2020/01/01').getTime()
+// Task.currentTime1 = new Date('2020/01/01').getTime()
 
 
 
 Task.release_all_lesson = () => {
-    return lessonModel.get_need_public_lesson(Task.currentTime1).then(lessonList => {
+    return lessonModel.get_need_public_lesson(Task.currentTime).then(lessonList => {
         return Promise.all(lessonList.map(lesson => Task.release_one_lesson(lesson)))
     })
 };
@@ -42,7 +42,7 @@ Task.release_one_lesson = (lesson) => {
 
 Task.release_all_fun = () => {
 
-    return funModel.get_need_public_fun(Task.currentTime1).then(funList => {
+    return funModel.get_need_public_fun(Task.currentTime).then(funList => {
         console.log(funList)
         return Promise.all(funList.map(fun => Task.release_one_fun(fun)))
     })
@@ -63,7 +63,7 @@ Task.release_one_fun = (fun) => {
 
 Task.release_all_talk = () => {
 
-    return talkModel.get_need_public_talk(Task.currentTime1).then(talkList => {
+    return talkModel.get_need_public_talk(Task.currentTime).then(talkList => {
         console.log(talkList)
         return Promise.all(talkList.map(talk => Task.release_one_talk(talk)))
     })
