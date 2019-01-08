@@ -3,37 +3,44 @@ const path = require("path");
 const secretId = "AKIDTTl8Y3XF3EKHFKroJ8Y5h1Sxdp5P7Z7b";
 const secretKey = "pCUefYKzXvmYM9sX3TlMpCTekiYEFC4t";
 var COS = require("cos-nodejs-sdk-v5");
+const setting = require('../config/config');
+const materialModel = require('../model/materialModel');
 // 使用永久密钥创建实例
 var cos = new COS({
     SecretId: secretId,
     SecretKey: secretKey
 });
-function qcloudUpload(localFile, className, fileType) {
+function qcloudUpload(localFile,) {
     return new Promise((resolve, reject) => {
-        let fileName = path.basename(localFile);
-        let info = localFile.split('/')
-        info.pop();
-        info.shift();
-        info[0]='';
-        let url = '/'+ info.join('/')+'/';
-        let keyPrefix = url ;
-        // "/ispace/"+ className +"/"+ fileType +"/" + dateformat(new Date(), "yyyymmdd") + "/";
-        cos.sliceUploadFile(
-            {
-                Bucket: "mediacenter-1255803335",
-                Region: "ap-beijing",
-                Key: keyPrefix + fileName,
-                FilePath: localFile
-            },
-            function(err, data) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(data);
-                    console.log(err, data);
+        console.log(localFile)
+        materialModel.findByUrl(localFile).then(material=>{
+            if(material.cdnUrl) return resolve();
+            localFile = localFile.replace(setting.host, './public');
+            let fileName = path.basename(localFile);
+            let keyPrefix = "/ispace/media/" + dateformat(new Date(), "yyyymmdd") + "/";
+            cos.sliceUploadFile(
+                {
+                    Bucket: "mediacenter-1255803335",
+                    Region: "ap-beijing",
+                    Key: keyPrefix + fileName,
+                    FilePath: localFile
+                },
+                function(err, data) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        console.log(data.Location)
+                        materialModel.update_material({cdnUrl: data.Location },material._id).then(()=>{
+                            resolve(data);
+                        }) //todo
+
+                    }
                 }
-            }
-        );
+            );
+
+        });
+
+
     });
 }
 

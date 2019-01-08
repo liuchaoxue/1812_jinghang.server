@@ -229,6 +229,9 @@ function getPram(material, cb) {
     if(material.zhVvtLen){
         pram.zhVvtLen = material.zhVvtLen;
     }
+    if(material.stage){
+        pram.stage = material.stage;
+    }
 
     cb(pram);
 }

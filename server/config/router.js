@@ -6,7 +6,7 @@ var lessonControl = require('../control/lessonControl');
 var labelControl = require('../control/labelControl');
 var funControl = require('../control/funControl');
 var talkControl = require('../control/talkControl');
-// var test = require('../control/testControl');
+var test = require('../control/testControl');
 
 //路由到页面
 router.get('/', function (req, res) {

@@ -6,6 +6,7 @@ var MaterialSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'File'
     },
+    cdnUrl: String,
     fileUrl: String,
     source: String,
     category: String,
@@ -19,6 +20,7 @@ var MaterialSchema = new Schema({
     zhVvtLen: Number,
     class: String,
     difficulty: String,
+    stage: Number, //生成文章状态 0未生成，１已生成
     createTime: {
         type: Date,
         default: Date.now
@@ -62,6 +64,9 @@ MaterialSchema.statics.get_one = function (id) {
     return this.findOne({_id: id})
         .populate('fileId')
         .exec();
+};
+MaterialSchema.statics.findByUrl = function(fileUrl){
+    return this.findOne({fileUrl:fileUrl}).exec();
 };
 
 //删除

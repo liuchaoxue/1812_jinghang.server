@@ -19,7 +19,7 @@ Task.release_one_lesson = (lesson) => {
     let fileList = [];
     let audioList = lesson.cms.match(/!+\[audio]\(([^)]*)\)/gi) || [];
     let videoList = lesson.cms.match(/!+\[video]\(([^)]*)\)/gi) || [];
-    Promise.all(fileList)
+    fileList = fileList.concat(audioList).concat(videoList).map(file => file.split(/\(|\)/)[1])
     Promise.all(fileList.map(file => {
         return qcloudUpload(file)
     })).then(() => {

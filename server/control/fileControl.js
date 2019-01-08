@@ -102,7 +102,8 @@ File._upload = (req, res) => {
                     let options = {
                         fileId: data._id,
                         fileUrl: data.fileUrl,
-                        zhTitle: req.files[i].originalname
+                        zhTitle: req.files[i].originalname,
+                        stage:0
                     };
 
                     let newMaterial = new MaterialModel(options);
