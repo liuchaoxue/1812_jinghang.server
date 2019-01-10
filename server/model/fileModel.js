@@ -45,17 +45,6 @@ FileInfoSchema.statics.get_one = function (id) {
     return this.findOne({_id: id}).exec();
 }
 
-FileInfoSchema.statics.settingPath = function (id, fileUrl)  {
-    return new Promise(resolve => {
-        this.findOne({_id: id}).then((file)=>{
-            file.fileUrl =  fileUrl;
-            file.save((err, file)=>{
-                resolve(file)
-            })
-        });
-    })
 
-
-};
 
 module.exports = db.conn.model('File', FileInfoSchema);

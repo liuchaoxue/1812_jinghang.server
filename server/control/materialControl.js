@@ -28,13 +28,13 @@ Material._add = (req, res) => {
 
 Material._find = (req, res) => {
     let materialInfo = req.query;
+
     getPram(materialInfo, (result) => {
         let page = materialInfo.page;
         let num = materialInfo.num;
+        let sort = materialInfo.sort ? JSON.parse(materialInfo.sort): undefined;
         if(page && num){
-            console.log(page+"======="+num);
-
-            MaterialModel.get_all_file(result, parseInt(page), parseInt(num)).then((data) => {
+            MaterialModel.get_all_file(result, parseInt(page), parseInt(num), sort).then((data) => {
                 return res.send({code: 0, data: data});
             })
         }else {
@@ -225,11 +225,11 @@ function getPram(material, cb) {
     if(material.difficulty){
         pram.difficulty = material.difficulty;
     }
-    if(material.enVvtLen){
-        pram.enVvtLen = material.enVvtLen;
+    if(material.enVvt){
+        pram.enVvtLen = material.enVvt.length;
     }
-    if(material.zhVvtLen){
-        pram.zhVvtLen = material.zhVvtLen;
+    if(material.zhVvt){
+        pram.zhVvtLen = material.zhVvt.length;
     }
     if(material.stage){
         pram.stage = material.stage;
