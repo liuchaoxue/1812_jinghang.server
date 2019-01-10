@@ -31,8 +31,9 @@ Material._find = (req, res) => {
     getPram(materialInfo, (result) => {
         let page = materialInfo.page;
         let num = materialInfo.num;
+        let sort = materialInfo.sort;
         if(page && num){
-            MaterialModel.get_all_file(result, parseInt(page), parseInt(num)).then((data) => {
+            MaterialModel.get_all_file(result, parseInt(page), parseInt(num), sort).then((data) => {
                 return res.send({code: 0, data: data});
             })
         }else {
