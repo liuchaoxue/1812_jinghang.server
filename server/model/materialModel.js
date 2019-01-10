@@ -21,6 +21,7 @@ var MaterialSchema = new Schema({
     class: String,
     difficulty: String,
     stage: Number, //生成文章状态 0未生成，１已生成
+    duration: Number, //视频时长
     createTime: {
         type: Date,
         default: Date.now
