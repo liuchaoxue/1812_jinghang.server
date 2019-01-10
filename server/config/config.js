@@ -1,9 +1,8 @@
 var path  = require('path')
-console.log();
 let config = {
-    conn: 'mongodb://localhost/jinghang',
-    port: process.env.PORT || 3000,
-    host: 'http://localhost:3000',
+    conn: 'mongodb://localhost/jinghang_dev',
+    port: process.env.PORT || 4000,
+    host: 'http://cms.jinghang.com',
     filePath: path.resolve('../media/'),
     fileStage: path.resolve('../media/fileStage')
 };
