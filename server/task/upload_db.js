@@ -13,7 +13,6 @@ function updateFileModel() {
     return new Promise(resolve=>{
 
         FileModel.get_all_num({}).then(fileList => {
-            console.log(fileList)
             let allPromises = fileList.map(file=>updateOneFileModel(file))
             Promise.all(allPromises).then(()=>{
                 resolve()
@@ -45,7 +44,6 @@ function updateOneFileModel(file) {
 function updateMaterialModel() {
     return new Promise(resolve=>{
         MaterialModel.get_all_num({}).then(materailList => {
-            console.log(materailList.length);
             let allPromises = materailList.map(materail=>updateOneMaterialModel(materail))
             Promise.all(allPromises).then(()=>{
                 resolve()
