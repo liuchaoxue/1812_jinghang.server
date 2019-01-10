@@ -159,7 +159,8 @@ File.ewa_handle = (req, res) => {
                         zhVvt: info.zhVvt,
                         enVvtLen: info.enVvtLen,
                         zhVvtLen: info.zhVvtLen,
-                        difficulty: info.difficulty
+                        difficulty: info.difficulty,
+                        duration: info.duration //视频时长
                     };
 
                     let newMaterial = new MaterialModel(options);
