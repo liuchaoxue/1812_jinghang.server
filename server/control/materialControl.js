@@ -251,6 +251,44 @@ function rmFile(fileUrl, cb) {
     })
 }
 
+
+
+//
+
+
+function insertMaterial(req, res){
+
+    var a = {
+        source: '',
+        key: '',
+        id:'',
+        fileUrl: '',
+        category: '',
+        enTitle: '',
+        zhTitle: '',
+        abstract: '',
+        label: '',
+        enVvt: '',
+        zhVvt: '',
+        enVvtLen: '',
+        zhVvtLen: '',
+        class: String,
+        difficulty: '',
+        stage: 0, //生成文章状态 0未生成，１已生成
+        duration: 0, //视频时长
+    }
+
+    let material = req.body
+
+    MaterialModel.get_one()
+
+
+}
+
+router.post('/')
+
+
+
 router.get('/', Material._main);
 router.post('/_add', Material._add);　//添加一条媒体
 router.get('/_find', Material._find);  //根据筛选条件获取所有
