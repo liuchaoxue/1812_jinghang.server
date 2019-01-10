@@ -10,6 +10,8 @@ var multer  = require('multer');
 var config = require('./server/config/config');
 var upload = multer({ dest: '../fileStage'});
 var task = require('./server/task/release');
+var uploadTask = require('./server/task/upload_db');
+
 
 var app = express();
 
@@ -45,6 +47,7 @@ app.use(function(req, res, next) {
 });
 
 // task.run();
+uploadTask.main()
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -56,5 +59,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;
