@@ -6,6 +6,8 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var routers = require('./server/config/router');
 var multer  = require('multer');
+
+var config = require('./server/config/config');
 var upload = multer({ dest: '../fileStage'});
 var task = require('./server/task/release');
 

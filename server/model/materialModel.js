@@ -8,6 +8,7 @@ var MaterialSchema = new Schema({
     },
     cdnUrl: String,
     fileUrl: String,
+    originalFile: String,
     source: String,
     category: String,
     enTitle: String,

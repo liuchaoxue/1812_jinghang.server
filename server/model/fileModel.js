@@ -1,9 +1,11 @@
 var db = require('../config/dbConnection');
 var Schema = db.mongoose.Schema;
+var config = require('../config/config');
 
-var FileSchema = new Schema({
+var FileInfoSchema = new Schema({
     fileName: String,
     fileUrl: String,
+    originalFile: String,
     vvt: String,
     source: String,
     createTime: {
@@ -19,28 +21,41 @@ var FileSchema = new Schema({
 });
 
 //获取所有文件
-FileSchema.statics.get_all_file = function () {
-    return this.find().sort({updateTime:-1}).exec();
+FileInfoSchema.statics.get_all_file = function () {
+    return this.find().sort({updateTime: -1}).exec();
 };
 
 //获取所有文件数量
-FileSchema.statics.get_all_num = function () {
+FileInfoSchema.statics.get_all_num = function () {
     return this.find().exec();
 };
 
 //删除一个文件
-FileSchema.statics.delete = function (id) {
+FileInfoSchema.statics.delete = function (id) {
     return this.remove({_id: id}).exec();
 };
 
 //重命名
-FileSchema.statics.rename = function (options, id) {
+FileInfoSchema.statics.rename = function (options, id) {
     return this.update({_id: id}, options).exec();
 };
 
 //根据id获取一条数据
-FileSchema.statics.get_one = function (id) {
+FileInfoSchema.statics.get_one = function (id) {
     return this.findOne({_id: id}).exec();
+}
+
+FileInfoSchema.statics.settingPath = function (id, fileUrl)  {
+    return new Promise(resolve => {
+        this.findOne({_id: id}).then((file)=>{
+            file.fileUrl =  fileUrl;
+            file.save((err, file)=>{
+                resolve(file)
+            })
+        });
+    })
+
+
 };
 
-module.exports = db.conn.model('File', FileSchema);
+module.exports = db.conn.model('File', FileInfoSchema);

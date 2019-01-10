@@ -21,7 +21,7 @@ router.use('/label', labelControl); //标签中心管理
 
 router.use('/ifun', funControl); //ifun课程管理
 router.use('/italk', talkControl); //italk课程管理
-router.use('/media',media) //todo
+router.use('/v1/media',media) //todo
 
 //todo 爬虫数据对接到媒体中心　version 1.10
 

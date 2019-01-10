@@ -32,6 +32,8 @@ Material._find = (req, res) => {
         let page = materialInfo.page;
         let num = materialInfo.num;
         if(page && num){
+            console.log(page+"======="+num);
+
             MaterialModel.get_all_file(result, parseInt(page), parseInt(num)).then((data) => {
                 return res.send({code: 0, data: data});
             })

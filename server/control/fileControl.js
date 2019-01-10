@@ -8,7 +8,7 @@ var Video = require('../util/webGetVideo');
 var Audio = require('../util/webGetAudio');
 var FileModel = require('../model/fileModel');
 var MaterialModel = require('../model/materialModel');
-var settings = require('../config/config');
+var CONFIG = require('../config/config');
 
 var Promise = require('promise');
 
@@ -78,39 +78,45 @@ File._upload = (req, res) => {
             let nameArr = req.files[i].originalname.split('.');
             let format = nameArr[nameArr.length - 1];
             let fileUuid = UUID.v1();
-            let dest = path.join('media', fileUuid + '.' +  format);
-            fs.rename(req.files[i].path, '../' + dest, (err) => {
+            // let dest = path.join('media', fileUuid + '.' +  format);
+            let dest =  '/upload/' + fileUuid + '.' +  format;
+            fs.rename(req.files[i].path, CONFIG.filePath + dest, (err) => {
                 if(err) {
                     console.log(err);
                     return resolve(err);
                 }
                 let pram = {
                     fileName: req.files[i].originalname,
-                    fileUrl: settings.host + dest,
+                    originalFile: dest,
                     vvt: vvt,
                     source: 'upload'
                 };
-                console.log(pram);
-                let newFile = new FileModel(pram);
-                newFile.save(function (err, data) {
+                new FileModel(pram).save((err, file)=>{
+                    if(err) return console.log('错误:'+ err);
+                    let fileUrl = CONFIG.host + '/v1/media/' + file._id;
+                    FileModel.settingPath(file._id, fileUrl).then((file)=>{
+                        
+                        if(!file){
+                            return console.log('错误:'+ err)
+                        }
+                        let options = {
+                            fileId: file._id,
+                            fileUrl: file.fileUrl,
+                            zhTitle: req.files[i].originalname,
+                            originalFile:  dest,
+                            stage:0
+                        };
 
-                    if(err){
-                        return console.log('错误:'+ err)
-                    }
-
-
-                    let options = {
-                        fileId: data._id,
-                        fileUrl: data.fileUrl,
-                        zhTitle: req.files[i].originalname,
-                        stage:0
-                    };
-
-                    let newMaterial = new MaterialModel(options);
-                    newMaterial.save((err, result) => {
-                        return resolve({file: data, material: result});
-                    });
+                        let newMaterial = new MaterialModel(options);
+                        newMaterial.save((err, result) => {
+                            console.log('==========================')
+                            console.log(err)
+                            console.log(result)
+                            return resolve({file: file, material: result});
+                        });
+                    })
                 });
+
             })
         });
         promiseArr.push(promise);
@@ -131,14 +137,14 @@ File.ewa_handle = (req, res) => {
             let format = nameArr[nameArr.length - 1];
             let fileUuid = UUID.v1();
             let dest = path.join('data', 'ewa', fileUuid + '.' +  format);
-            fs.rename(req.files[i].path, './public/' + dest, (err) => {
+            fs.rename(req.files[i].path,  CONFIG.filePath + dest, (err) => {
                 if(err) {
                     console.log(err);
                     return resolve(err);
                 }
                 let pram = {
                     fileName: req.files[i].originalname,
-                    fileUrl: settings.host + dest,
+                    fileUrl: CONFIG.host + dest,
                     source: 'ewa'
                 };
                 console.log(pram);
