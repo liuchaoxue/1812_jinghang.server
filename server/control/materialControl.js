@@ -28,10 +28,11 @@ Material._add = (req, res) => {
 
 Material._find = (req, res) => {
     let materialInfo = req.query;
+
     getPram(materialInfo, (result) => {
         let page = materialInfo.page;
         let num = materialInfo.num;
-        let sort = materialInfo.sort;
+        let sort = materialInfo.sort ? JSON.parse(materialInfo.sort): undefined;
         if(page && num){
             MaterialModel.get_all_file(result, parseInt(page), parseInt(num), sort).then((data) => {
                 return res.send({code: 0, data: data});
