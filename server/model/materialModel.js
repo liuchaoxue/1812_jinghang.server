@@ -52,7 +52,7 @@ var MaterialSchema = new Schema({
 
 //分页获取筛选条件下的所有文件
 MaterialSchema.statics.get_all_file = function (options, page, num) {
-    return this.find(options).skip((page-1)*num).limit(num).sort({updateTime:-1}).exec();
+    return this.find(options).skip((page-1)*num).limit(num).sort({enVvtLen: -1}).exec();
 };
 
 //获取筛选条件下的所有文件数量
