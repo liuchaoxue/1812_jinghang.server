@@ -272,7 +272,7 @@ function insertMaterial(req, res){
      *   "enVvt": "",
      *   "class": '',
      *   "label":[],
-     *   "category": "italk" //require
+     *   "category": ""
      *   "difficulty":'',
      *   "file": { //require
      *     "r": "low",
@@ -283,14 +283,13 @@ function insertMaterial(req, res){
      * file.type有音频"audio"，视频"video"，图片"pic"
      */
 
-
-
-
-
-
     let newMaterial = req.body;
-
-    MaterialModel.findOne({mark:newMaterial.source + "_" + newMateriall.source_id}).then((material)=>{
+    newMaterial.files = [JSON.parse(JSON.stringify(newMaterial.file))];g
+    newMaterial.enVvtLen = newMaterial.enVvt ?  newMaterial.enVvt.length : 0;
+    newMaterial.zhVvtLen = newMaterial.zhVvt ?  newMaterial.zhVvt.length : 0;
+    newMaterial.mark = newMaterial.source + "_" + newMaterial.source_id;
+    delete newMaterial.file;
+    MaterialModel.findOne({mark:newMaterial.mark}).then((material)=>{
         if(material){
             material.files.push(newMaterial.files[0]);
             material.save((err, material)=>{

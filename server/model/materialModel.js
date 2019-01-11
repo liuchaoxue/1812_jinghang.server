@@ -92,16 +92,11 @@ MaterialSchema.statics.update_material = function (options, id) {
 };
 
 
-MaterialSchema.statics.settingPath = function (id, fileUrl) {
-    return new Promise(resolve => {
-        this.findOne({_id: id}).then((file) => {
-            file.fileUrl = fileUrl;
-            file.save((err, file) => {
-                resolve(file)
-            })
-        });
-    })
+MaterialSchema.statics.findByMark = function (mark) {
+    return this.findOne({mark: mark}).exec();
 };
+
+
 
 
 MaterialSchema.statics.updateFiles = function (mark, newMaterial) {
