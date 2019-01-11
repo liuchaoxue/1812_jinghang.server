@@ -2,13 +2,17 @@ var db = require('../config/dbConnection');
 var Schema = db.mongoose.Schema;
 
 var MaterialSchema = new Schema({
-    fileId: {
-        type: Schema.Types.ObjectId,
-        ref: 'File'
+    // fileId: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'File'
+    // },
+    mark: {
+        type: String,
+        required: true,
+        unique: true
     },
-    cdnUrl: String,
     fileUrl: String,
-    originalFile: String,
+    files:Array,
     source: String,
     category: String,
     enTitle: String,
@@ -23,6 +27,8 @@ var MaterialSchema = new Schema({
     difficulty: String,
     stage: Number, //生成文章状态 0未生成，１已生成
     duration: Number, //视频时长
+
+
     createTime: {
         type: Date,
         default: Date.now
@@ -31,6 +37,7 @@ var MaterialSchema = new Schema({
         type: Date,
         default: Date.now
     }
+
 });
 
 // {
@@ -53,8 +60,8 @@ var MaterialSchema = new Schema({
 
 //分页获取筛选条件下的所有文件
 MaterialSchema.statics.get_all_file = function (options, page, num, sort) {
-    sort =  sort || {updateTime: -1};
-    return this.find(options).skip((page-1)*num).limit(num).sort(sort).exec();
+    sort = sort || {updateTime: -1};
+    return this.find(options).skip((page - 1) * num).limit(num).sort(sort).exec();
 };
 
 //获取筛选条件下的所有文件数量
@@ -68,8 +75,8 @@ MaterialSchema.statics.get_one = function (id) {
         .populate('fileId')
         .exec();
 };
-MaterialSchema.statics.findByUrl = function(fileUrl){
-    return this.findOne({fileUrl:fileUrl}).exec();
+MaterialSchema.statics.findByUrl = function (fileUrl) {
+    return this.findOne({fileUrl: fileUrl}).exec();
 };
 
 //删除
@@ -79,18 +86,26 @@ MaterialSchema.statics.delete = function (id) {
 
 //更新
 MaterialSchema.statics.update_material = function (options, id) {
-    return this.update({_id: id}, {$set:options}).exec();
+    return this.update({_id: id}, {$set: options}).exec();
 };
 
-MaterialSchema.statics.settingPath = function (id, fileUrl)  {
+
+MaterialSchema.statics.settingPath = function (id, fileUrl) {
     return new Promise(resolve => {
-        this.findOne({_id: id}).then((file)=>{
-            file.fileUrl =  fileUrl;
-            file.save((err, file)=>{
+        this.findOne({_id: id}).then((file) => {
+            file.fileUrl = fileUrl;
+            file.save((err, file) => {
                 resolve(file)
             })
         });
     })
 };
+
+
+MaterialSchema.statics.updateFiles = function (mark, newMaterial) {
+    return this.update( {mark: mark} , {$push: {files: newMaterial.file}}).exec();
+};
+
+
 
 module.exports = db.conn.model('Material', MaterialSchema);
