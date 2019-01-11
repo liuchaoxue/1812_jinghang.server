@@ -26,24 +26,21 @@ function qcloudUpload(id) {
             Promise.all(allPromises).then(function(cdnFiles){
 
                 let newfiles  = material.files = material.files.map((file, index)=>{
-                    file.cdn_url = cdnFiles[index];
-                    return file
+                    let newFile = {r: file.r, file_id: file.file_id, cdn_url:cdnFiles[index]};
+
+                    return newFile
                 });
-                console.log('============')
                 material.files =  JSON.parse(JSON.stringify(newfiles))
                 material.cdnUrl = true;
                 material.save((err, materialInfo)=>{
 
                     if(err) return reject()
-                    console.log(JSON.stringify(materialInfo))
                     resolve(materialInfo)
                 })
 
 
             },(err)=>{
-                console.log('========121221====')
-                console.log(err)
-                    reject()
+                reject()
             })
         });
     });

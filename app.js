@@ -46,7 +46,7 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// task.run();
+task.run();
 // uploadTask.main()
 
 // error handler

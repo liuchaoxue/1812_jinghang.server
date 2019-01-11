@@ -46,7 +46,7 @@ TalkSchema.statics.get_all_num = function (options) {
     return this.find(options).exec();
 };
 TalkSchema.statics.get_need_public_talk = function(time){
-    return this.find({ status: {'$ne': 2}}).populate('materialId').exec(); //todo 状态确认
+    return this.find({ status: {'$ne': 2},publicTime: {"$lte": time}}).populate('materialId').exec(); //todo 状态确认
 };
 
 //删除一个课程

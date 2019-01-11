@@ -242,7 +242,7 @@ var Promise = require('promise');
 function upload(req, res) {
     let file = req.files[0];
     // let fileExtension = file.originalname.split('.').pop();
-    let fileUuid = UUID.v1();
+    let fileUuid = UUID.v4();
     let filePath = config.filePath + "/" + fileUuid.split('-')[0];
     if (!fs.existsSync(filePath)) {
         fs.mkdirSync(filePath);

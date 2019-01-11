@@ -62,9 +62,7 @@ Task.release_one_fun = (fun) => {
 
 Task.release_all_talk = () => {
 
-    return talkModel.get_need_public_talk(Task.currentTime1).then(talkList => {
-        console.log('=================talk')
-        console.log(talkList)
+    return talkModel.get_need_public_talk(Task.currentTime).then(talkList => {
         return Promise.all(talkList.map(talk => Task.release_one_talk(talk)))
     })
 };
