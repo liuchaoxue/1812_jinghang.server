@@ -291,6 +291,8 @@ function insertMaterial(req, res){
     delete newMaterial.file;
     MaterialModel.findOne({mark:newMaterial.mark}).then((material)=>{
         if(material){
+            let hadUpload =  !!material.files.find(file=> file.r === newMaterial.files[0].r);
+            if (hadUpload) return res.send({success: true, data: material});
             material.files.push(newMaterial.files[0]);
             material.save((err, material)=>{
                 if(err) return res.send({success: false, data:{}})

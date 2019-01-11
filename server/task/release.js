@@ -89,7 +89,7 @@ Task.upload_cdn = (filelist) => {
 
 
 Task.hadRunTask = () => {
-    let currentTime = parseInt(new Date().getTime() / taskIntval) * taskIntval;
+    let currentTime = parseInt(new Date().getTime() / taskIntval) * taskIntval/1000;
 
     if (currentTime !== Task.currentTime) {
         Task.currentTime = currentTime;
