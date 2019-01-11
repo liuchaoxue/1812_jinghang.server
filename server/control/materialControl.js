@@ -6,6 +6,7 @@ var MaterialModel = require('../model/materialModel');
 var LessonModel = require('../model/lessonModel');
 var FunModel = require('../model/funModel');
 var TalkModel = require('../model/talkModel');
+var LabelModel= require('../model/labelModel');
 
 const config = require('../config/config');
 
@@ -256,6 +257,25 @@ function rmFile(fileUrl, cb) {
 
 
 
+function createLabel(labelName, category){
+    return new Promise(resolve=>{
+        console.log("1212")
+        LabelModel.get_all_label({label: labelName, category: category}).then(result => {
+            console.log(result)
+            if(result.length > 0){
+                console.log(result[0].label)
+                return resolve(result[0].label)
+            }
+            console.log('===============')
+            let newLabel = new LabelModel({label: labelName, category: category});
+            newLabel.save((err, data) => {
+                return resolve(labelName)
+            });
+        });
+    });
+
+}
+
 //
 
 
@@ -289,26 +309,38 @@ function insertMaterial(req, res){
     newMaterial.zhVvtLen = newMaterial.zhVvt ?  newMaterial.zhVvt.length : 0;
     newMaterial.mark = newMaterial.source + "_" + newMaterial.source_id;
     delete newMaterial.file;
-    MaterialModel.findOne({mark:newMaterial.mark}).then((material)=>{
-        if(material){
-            let hadUpload =  !!material.files.find(file=> file.r === newMaterial.files[0].r);
-            if (hadUpload) return res.send({success: true, data: material});
-            material.files.push(newMaterial.files[0]);
-            material.save((err, material)=>{
-                if(err) return res.send({success: false, data:{}})
-                res.send({success: true, data: material})
-            })
-        }else{
-            new MaterialModel(newMaterial).save((err, material)=>{
-                if(err) return res.send({success: false, data:{}})
-                material.fileUrl =  config.host+"/v1/media/"+material._id;
-                material.save((err,material)=>{
-                    res.send({success: true, data: material})
-                });
-            })
-        }
-    });
+    var promise =     newMaterial.label && newMaterial.category ? Promise.all(newMaterial.label.map(label=> createLabel(label, newMaterial.category))) : Promise.resolve(undefined)
+
+
+        promise.then(label=>{
+            console.log('=========end')
+            console.log(label)
+            newMaterial.label = label;
+            MaterialModel.findOne({mark:newMaterial.mark}).then((material)=>{
+                if(material){
+                    let hadUpload =  !!material.files.find(file=> file.r === newMaterial.files[0].r);
+                    if (hadUpload) return res.send({success: true, data: material});
+                    material.files.push(newMaterial.files[0]);
+                    material.save((err, material)=>{
+                        if(err) return res.send({success: false, data:{}})
+                        res.send({success: true, data: material})
+                    })
+                }else{
+                    new MaterialModel(newMaterial).save((err, material)=>{
+                        if(err) return res.send({success: false, data:{}})
+                        material.fileUrl =  config.host+"/v1/media/"+material._id;
+                        material.save((err,material)=>{
+                            res.send({success: true, data: material})
+                        });
+                    })
+                }
+            });
+        });
+
+
+
 }
+
 
 router.post('/', insertMaterial);
 
