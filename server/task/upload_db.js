@@ -25,14 +25,19 @@ function updateFileModel() {
 
 
 function updateOneFileModel(file) {
+    file = (JSON.parse(JSON.stringify(file)))
     return new Promise(resolve=>{
         let updateInfo = {
-            fileUrl: '',
-            originalFile: file.fileUrl.replace('http://188.131.179.172:16000', '')
+            fileUrl: undefined,
+            file_id: file.fileUrl.split('/').pop().split('.')[0]
 
         };
-        FileModel.rename(updateInfo, file._id).then(()=>{
+        console.log(updateInfo)
+        FileModel.rename(updateInfo, file._id).then((err)=>{
+            console.log(err)
             resolve()
+        },(err)=>{
+            console.log(err)
         })
     })
 
@@ -54,11 +59,13 @@ function updateMaterialModel() {
 
 
 function updateOneMaterialModel(material) {
+    material = (JSON.parse(JSON.stringify(material)))
+
     return new Promise(resolve=>{
         let updateInfo = {
             fileUrl: config.host+'/v1/media/'+material._id,
-            originalFile: material.fileUrl.replace('http://188.131.179.172:16000', '')
-
+            files:[{'r':'default', file_id: material.fileUrl.split('/').pop().split('.')[0]}],
+            mark: material.source+"_"+ material.fileUrl.split('/').pop().split('.')[0]
         };
         MaterialModel.update_material(updateInfo, material._id).then(()=>{
             resolve()
@@ -81,6 +88,8 @@ function updateLessonModel() {
 
 
 function updateOneLessonModel(lesson) {
+    lesson = (JSON.parse(JSON.stringify(lesson)))
+
 
     return new Promise(resolve=>{
         let fileList = [];

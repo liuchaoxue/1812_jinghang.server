@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
+var qcloudUpload = require('../util/qcloud-upload');
 
 let FunModel = require('../model/funModel');
+
 let Fun = {};
 
 
@@ -124,6 +126,36 @@ Fun._public = (req, res) => {
     }
 };
 
+
+
+
+Fun.release =  function(req, res){
+
+    let lessonInfo = req.body;
+    let id = req.params.id;
+    let time = lessonInfo.time; //定时时间戳，精确到秒
+    let nowTime = parseInt((Date.now())/1000);
+
+    if(time && time <= nowTime) {
+        return res.send({code: 1, data: '设定时间小于当前时间'})
+    }
+    if(time){
+        FunModel.update_lesson({publicTime: time, status:1}, id).then(data => {
+            return res.send({code: 0, data: data})
+        })
+    }else{
+        FunModel.get_one(id).then(fun=>{
+            if(!fun) return  res.send({code:1, data:"该iFun不存在"})
+            qcloudUpload(fun.materialId._id).then(()=>{
+                FunModel.update_lesson({publicTime: nowTime ,status:2}, id).then(data => {
+                    return res.send({code: 0, data: data})
+                })
+            })
+        })
+    }
+};
+
+
 Fun._getone = (req, res) => {
     let lessonInfo = req.query;
     if(lessonInfo.lessonId){
@@ -171,12 +203,12 @@ function getPram(lessonInfo, pram, cb) {
     cb(pram)
 }
 
-router.post('/_add', Fun._add); //添加一个带有分类的标签 通用标签分类为all
+// router.post('/_add', Fun._add); //添加一个带有分类的标签 通用标签分类为all
 router.get('/_find', Fun._find); //通过分类查询标签
 router.get('/_getnum', Fun._getnum); //根据条件获取课程的总数量
 router.post('/_update', Fun._update); //更新课程信息
 router.get('/_delete', Fun._delete); //删除一个课程
-router.post('/_public', Fun._public); //定时发布一个课程
+router.post('/:id/release', Fun.release); //发布一个课程
 router.get('/_getone', Fun._getone); //获取单个课程
 
 

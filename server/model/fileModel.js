@@ -3,7 +3,7 @@ var Schema = db.mongoose.Schema;
 var config = require('../config/config');
 
 var FileInfoSchema = new Schema({
-    source: String,
+    file_id: String,
     createTime: {
         type: Date,
         default: Date.now

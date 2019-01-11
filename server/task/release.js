@@ -25,7 +25,8 @@ Task.release_one_lesson = (lesson) => {
     let fileList = [];
     let audioList = lesson.cms.match(/!+\[audio]\(([^)]*)\)/gi) || [];
     let videoList = lesson.cms.match(/!+\[video]\(([^)]*)\)/gi) || [];
-    fileList = fileList.concat(audioList).concat(videoList).map(file => file.split(/\(|\)/)[1])
+    let picList = lesson.cms.match(/!+\[video]\(([^)]*)\)/gi) || [];
+    fileList = fileList.concat(audioList).concat(videoList).concat(picList).map(file => file.split(/\(|\)/)[1].split('/').pop())
    return new Promise(resolve => {
        Promise.all(fileList.map(file => {
            return qcloudUpload(file)
@@ -43,15 +44,12 @@ Task.release_one_lesson = (lesson) => {
 Task.release_all_fun = () => {
 
     return funModel.get_need_public_fun(Task.currentTime).then(funList => {
-        console.log(funList)
         return Promise.all(funList.map(fun => Task.release_one_fun(fun)))
     })
 };
 Task.release_one_fun = (fun) => {
-    console.log('==================fun')
-    console.log(fun)
     return new Promise(resolve => {
-        qcloudUpload(fun.materialId.fileUrl).then(() => {
+        qcloudUpload(fun.materialId._id).then(() => {
             funModel.update_lesson({status: 2}, fun._id).then(() => {
                 console.log(fun._id, '已发布');
                 resolve()
@@ -64,14 +62,13 @@ Task.release_one_fun = (fun) => {
 Task.release_all_talk = () => {
 
     return talkModel.get_need_public_talk(Task.currentTime).then(talkList => {
-        console.log(talkList)
         return Promise.all(talkList.map(talk => Task.release_one_talk(talk)))
     })
 };
 Task.release_one_talk = (talk) => {
     return new Promise(resolve => {
 
-        qcloudUpload(talk.materialId.fileUrl).then(() => {
+        qcloudUpload(talk.materialId._id).then(() => {
             talkModel.update_lesson({status: 2}, talk._id).then(() => {
                 console.log(talk._id, '已发布');
                 resolve()
@@ -99,6 +96,8 @@ Task.hadRunTask = () => {
     }
     return true;
 };
+
+
 
 Task.run = () => {
     setInterval(() => {

@@ -7,24 +7,27 @@ var LessonModel = require('../model/lessonModel');
 var FunModel = require('../model/funModel');
 var TalkModel = require('../model/talkModel');
 
+const config = require('../config/config');
+
+
 let Material = {};
 
-Material._main = (req, res) => {
-    res.send({code: 0, data: '媒体库'})
-};
-
-Material._add = (req, res) => {
-    let materialInfo = req.body;
-    getPram(materialInfo, (result) => {
-        let newMaterial = new MaterialModel(result);
-        newMaterial.save((err, data) => {
-            if(err){
-                return res.send({code: 1, data: '添加媒体文件失败'})
-            }
-            res.send({code: 0, data: data});
-        })
-    })
-};
+// Material._main = (req, res) => {
+//     res.send({code: 0, data: '媒体库'})
+// };
+//
+// Material._add = (req, res) => {
+//     let materialInfo = req.body;
+//     getPram(materialInfo, (result) => {
+//         let newMaterial = new MaterialModel(result);
+//         newMaterial.save((err, data) => {
+//             if(err){
+//                 return res.send({code: 1, data: '添加媒体文件失败'})
+//             }
+//             res.send({code: 0, data: data});
+//         })
+//     })
+// };
 
 Material._find = (req, res) => {
     let materialInfo = req.query;
@@ -258,39 +261,60 @@ function rmFile(fileUrl, cb) {
 
 function insertMaterial(req, res){
 
-    var a = {
-        source: '',
-        key: '',
-        id:'',
-        fileUrl: '',
-        category: '',
-        enTitle: '',
-        zhTitle: '',
-        abstract: '',
-        label: '',
-        enVvt: '',
-        zhVvt: '',
-        enVvtLen: '',
-        zhVvtLen: '',
-        class: String,
-        difficulty: '',
-        stage: 0, //生成文章状态 0未生成，１已生成
-        duration: 0, //视频时长
-    }
-
-    let material = req.body
-
-    MaterialModel.get_one()
+    /**
+     * 实例输入
+     * {
+     *   source:"", //require
+     *   source_id:"", //require
+     *   "zhTitle": "喜马拉雅山高呀",
+     *   "enTitle":"",
+     *   "zhVvt": "高呀高呀",
+     *   "enVvt": "",
+     *   "class": '',
+     *   "label":[],
+     *   "category": "italk" //require
+     *   "difficulty":'',
+     *   "file": { //require
+     *     "r": "low",
+     *     "file_id": "1230i9093750895738945",
+     *     "type": "audio"
+     *   }
+     * }
+     * file.type有音频"audio"，视频"video"，图片"pic"
+     */
 
 
+
+
+
+
+    let newMaterial = req.body;
+
+    MaterialModel.findOne({mark:newMaterial.source + "_" + newMateriall.source_id}).then((material)=>{
+        if(material){
+            material.files.push(newMaterial.files[0]);
+            material.save((err, material)=>{
+                if(err) return res.send({success: false, data:{}})
+                res.send({success: true, data: material})
+            })
+        }else{
+            new MaterialModel(newMaterial).save((err, material)=>{
+                if(err) return res.send({success: false, data:{}})
+                material.fileUrl =  config.host+"/v1/media/"+material._id;
+                material.save((err,material)=>{
+                    res.send({success: true, data: material})
+                });
+            })
+        }
+    });
 }
 
-router.post('/')
+router.post('/', insertMaterial);
 
 
 
-router.get('/', Material._main);
-router.post('/_add', Material._add);　//添加一条媒体
+// router.get('/', Material._main);
+// router.post('/_add', Material._add);　//添加一条媒体
 router.get('/_find', Material._find);  //根据筛选条件获取所有
 router.get('/_getnum', Material._getnum);　//根据筛选条件获取所有数量
 router.post('/_update', Material._update); //更新媒体信息

@@ -6,6 +6,8 @@ var LessonModel = require('../model/lessonModel');
 var FunModel = require('../model/funModel');
 var TalkModel = require('../model/talkModel');
 var MaterialModel = require('../model/materialModel');
+var qcloudUpload = require('../util/qcloud-upload');
+
 
 let Lesson = {};
 
@@ -212,6 +214,43 @@ Lesson._public = (req, res) => {
     }
 };
 
+
+
+Lesson.release =  function(req, res){
+
+    let lessonInfo = req.body;
+    let id = req.params.id;
+    let time = lessonInfo.time; //定时时间戳，精确到秒
+    let nowTime = parseInt((Date.now())/1000);
+
+    if(time && time <= nowTime) {
+        return res.send({code: 1, data: '设定时间小于当前时间'})
+    }
+
+    if(time){
+        LessonModel.update_lesson({publicTime: time, status:1}, id).then(data => {
+            return res.send({code: 0, data: data})
+        })
+    }else{
+        LessonModel.get_one(id).then(lesson=>{
+            if(!lesson) return  res.send({code:1, data:"该iWord不存在"});
+            let audioList = lesson.cms.match(/!+\[audio]\(([^)]*)\)/gi) || [];
+            let videoList = lesson.cms.match(/!+\[video]\(([^)]*)\)/gi) || [];
+            let picList =  lesson.cms.match(/!+\[pic]\(([^)]*)\)/gi) || [];
+            let materialList = audioList.concat(videoList).concat(picList).map(url=> url.split(/\(|\)/)[1].split('/').pop());
+            Promise.all(materialList.map(material=> qcloudUpload(material))).then(()=>{
+                LessonModel.update_lesson({publicTime: nowTime ,status:2}, id).then(data => {
+                    return res.send({code: 0, data: data})
+                })
+            });
+        })
+    }
+};
+
+
+
+
+
 Lesson._getone = (req, res) => {
     let lessonInfo = req.query;
     if(lessonInfo.lessonId){
@@ -222,6 +261,11 @@ Lesson._getone = (req, res) => {
         return res.send({code: 1, data: '缺少lessonId参数'})
     }
 };
+
+
+
+
+
 
 Lesson._get_iword_public = (req, res) => {
 

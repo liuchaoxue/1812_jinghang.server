@@ -12,7 +12,9 @@ var MaterialSchema = new Schema({
         unique: true
     },
     fileUrl: String,
+
     files:Array,
+
     source: String,
     category: String,
     enTitle: String,

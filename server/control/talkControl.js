@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var qcloudUpload = require('../util/qcloud-upload');
+
 
 let TalkModel = require('../model/talkModel');
 let Talk = {};
@@ -97,29 +99,56 @@ Talk._delete = (req, res) => {
     }
 };
 
-Talk._public = (req, res) => {
+// Talk._public = (req, res) => {
+//     let lessonInfo = req.body;
+//     let id = lessonInfo.lessonId;
+//     let time = lessonInfo.time; //定时时间戳，精确到秒
+//     let nowTime = parseInt((Date.now())/1000);
+//     if(id　&& time){
+//         if(time <= nowTime){
+//             return res.send({code: 1, data: '设定时间小于当前时间'})
+//         }else {
+//             let timeout = time - nowTime;
+//             let pram = {status: 1};
+//             pram.publicTime = time;
+//             TalkModel.update_lesson(pram, id).then(data => {
+//                 setTimeout(() => {
+//                     TalkModel.update_lesson({status: 2}, id).then(data => {
+//                         console.log(id, '已发布');
+//                     })
+//                 }, timeout * 1000);
+//                 return res.send({code: 0, data: data})
+//             })
+//         }
+//     }else {
+//         return res.send({code: 1, data: '缺少参数'})
+//     }
+// };
+
+
+Talk.release =  function(req, res){
+
     let lessonInfo = req.body;
-    let id = lessonInfo.lessonId;
+    let id = req.params.id;
     let time = lessonInfo.time; //定时时间戳，精确到秒
     let nowTime = parseInt((Date.now())/1000);
-    if(id　&& time){
-        if(time <= nowTime){
-            return res.send({code: 1, data: '设定时间小于当前时间'})
-        }else {
-            let timeout = time - nowTime;
-            let pram = {status: 1};
-            pram.publicTime = time;
-            TalkModel.update_lesson(pram, id).then(data => {
-                setTimeout(() => {
-                    TalkModel.update_lesson({status: 2}, id).then(data => {
-                        console.log(id, '已发布');
-                    })
-                }, timeout * 1000);
-                return res.send({code: 0, data: data})
+
+    if(time && time <= nowTime) {
+        return res.send({code: 1, data: '设定时间小于当前时间'})
+    }
+    if(time){
+        TalkModel.update_lesson({publicTime: time, status:1}, id).then(data => {
+            return res.send({code: 0, data: data})
+        })
+    }else{
+        TalkModel.get_one(id).then(talk=>{
+            if(!talk) return  res.send({code:1, data:"该iTalk不存在"})
+            qcloudUpload(talk.materialId._id).then(()=>{
+                TalkModel.update_lesson({publicTime: nowTime ,status:2}, id).then(data => {
+                    return res.send({code: 0, data: data})
+                })
             })
-        }
-    }else {
-        return res.send({code: 1, data: '缺少参数'})
+        })
     }
 };
 
@@ -175,7 +204,7 @@ router.get('/_find', Talk._find); //通过分类查询标签
 router.get('/_getnum', Talk._getnum); //根据条件获取课程的总数量
 router.post('/_update', Talk._update); //更新课程信息
 router.get('/_delete', Talk._delete); //删除一个课程
-router.post('/_public', Talk._public); //定时发布一个课程
+router.post('/_public', Talk.release); //定时发布一个课程
 router.get('/_getone', Talk._getone); //获取单个课程
 
 

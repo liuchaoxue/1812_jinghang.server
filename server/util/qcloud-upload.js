@@ -1,46 +1,66 @@
 const dateformat = require("dateformat")
 const path = require("path");
-const secretId = "AKIDTTl8Y3XF3EKHFKroJ8Y5h1Sxdp5P7Z7b";
-const secretKey = "pCUefYKzXvmYM9sX3TlMpCTekiYEFC4t";
+
 var COS = require("cos-nodejs-sdk-v5");
 const config = require('../config/config');
+const secretId = config.secretId;
+const secretKey = config.secretKey;
 const materialModel = require('../model/materialModel');
 // 使用永久密钥创建实例
 var cos = new COS({
     SecretId: secretId,
     SecretKey: secretKey
 });
-function qcloudUpload(localFile,) {
+function qcloudUpload(id) {
     return new Promise((resolve, reject) => {
-        materialModel.findByUrl(localFile).then(material=>{
+        materialModel.get_one(id).then(material=>{
             if(material.cdnUrl) return resolve();
-            localFile = localFile.replace(config.host, config.filepath.replace('media/',''));
-            let fileName = path.basename(localFile);
-            let keyPrefix = "/ispace/media/" + dateformat(new Date(), "yyyymmdd") + "/";
-            cos.sliceUploadFile(
-                {
-                    Bucket: "mediacenter-1255803335",
-                    Region: "ap-beijing",
-                    Key: keyPrefix + fileName,
-                    FilePath: localFile
-                },
-                function(err, data) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        console.log(data.Location)
-                        materialModel.update_material({cdnUrl: "http://"+data.Location },material._id).then(()=>{
-                            resolve(data);
-                        }) //todo
 
-                    }
-                }
-            );
+            let files = material.files;
 
+            let allPromises = files.map((file)=>{
+                let filePath = config.filePath + "/" + file.split('-')[0]+"/" + file.file_id
+                return uploadToCDN(filePath)
+            });
+            Promise.all(allPromises).then(function(cdnFiles){
+                material.cdnUrl = material.files.map((file, index)=>{
+                    file = JSON.parse(JSON.stringify(file));
+                    return file.url = cdnFiles[index]
+                })
+                material.save((err, material)=>{
+                    if(err) return reject()
+                    resolve(material)
+                })
+
+
+            },()=>{
+                    reject()
+            })
         });
-
-
     });
+}
+
+function uploadToCDN(filePath){
+    return new Promise((resolve, reject) => {
+        let fileName = path.basename(filePath);
+        let keyPrefix = "/ispace/media/" + dateformat(new Date(), "yyyymmdd") + "/";
+        cos.sliceUploadFile(
+            {
+                Bucket: "mediacenter-1255803335",
+                Region: "ap-beijing",
+                Key: keyPrefix + fileName,
+                FilePath: filePath
+            },
+            function(err, data) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve("http://"+ data.Location);
+                }
+            }
+        );
+    });
+
 }
 
 module.exports = qcloudUpload;

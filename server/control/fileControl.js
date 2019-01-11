@@ -241,32 +241,30 @@ var Promise = require('promise');
 
 function upload(req, res) {
     let file = req.files[0];
-        let fileExtension = file.originalname.split('.').pop();
-        let fileUuid = UUID.v1();
-        let filePath = CONFIG.filePath + "/" + fileUuid.split('-').shift();
-        if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath);
+    // let fileExtension = file.originalname.split('.').pop();
+    let fileUuid = UUID.v1();
+    let filePath = CONFIG.filePath + "/" + fileUuid.split('-')[0];
+    if (!fs.existsSync(filePath)) {
+        fs.mkdirSync(filePath);
+    }
+    fs.rename(file.path, path.join(filePath, fileUuid ), (err) => {
+        if (err) {
+            return res.send({success: false, data: {}});
         }
-        fs.rename(file.path, path.join(filePath, fileUuid + '.' + fileExtension), (err) => {
-            if (err) {
-                return res.send({code: 201, uuid: undefined});
-            }
 
-            let newFile = {
-                extension: fileExtension,
-            };
+        let newFile = {
+            file_id: fileUuid,
+        };
 
-            new FileModel(newFile).save((err, file) => {
-                return res.send({code: 200, uuid: fileUuid})
-            });
-
+        new FileModel(newFile).save((err, file) => {
+            return res.send({success: true, data: {id: fileUuid }})
         });
+
+    });
 }
 
 
 router.post('/', upload)
-
-
 
 
 // router.post('/', function () {
