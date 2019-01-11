@@ -284,7 +284,7 @@ function insertMaterial(req, res){
      */
 
     let newMaterial = req.body;
-    newMaterial.files = [JSON.parse(JSON.stringify(newMaterial.file))];g
+    newMaterial.files = [JSON.parse(JSON.stringify(newMaterial.file))];
     newMaterial.enVvtLen = newMaterial.enVvt ?  newMaterial.enVvt.length : 0;
     newMaterial.zhVvtLen = newMaterial.zhVvt ?  newMaterial.zhVvt.length : 0;
     newMaterial.mark = newMaterial.source + "_" + newMaterial.source_id;
