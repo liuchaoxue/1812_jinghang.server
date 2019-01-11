@@ -1,4 +1,4 @@
-const interval = 60 * 1000 * 0.5;
+const interval = 60 * 1000 * 0.1;
 const taskIntval = 60 * 1000 * 30;
 
 const lessonModel = require('../model/lessonModel');
@@ -12,7 +12,7 @@ function Task() {
 
 Task.currentTime = '';
 
-// Task.currentTime1 = new Date('2020/01/01').getTime()
+Task.currentTime1 = new Date('2020/01/01').getTime()
 
 
 
@@ -35,7 +35,7 @@ Task.release_one_lesson = (lesson) => {
                console.log(lesson._id, '已发布');
                resolve()
            })
-       }) //todo 上传失败
+       },()=>{}) //todo 上传失败
    })
 
 };
@@ -49,31 +49,34 @@ Task.release_all_fun = () => {
 };
 Task.release_one_fun = (fun) => {
     return new Promise(resolve => {
+
         qcloudUpload(fun.materialId._id).then(() => {
-            funModel.update_lesson({status: 2}, fun._id).then(() => {
+            // funModel.update_lesson({status: 2}, fun._id).then(() => {
                 console.log(fun._id, '已发布');
                 resolve()
-            })
-        }) //todo 上传失败
+            // })
+        },()=>{}) //todo 上传失败
     })
 
 };
 
 Task.release_all_talk = () => {
 
-    return talkModel.get_need_public_talk(Task.currentTime).then(talkList => {
+    return talkModel.get_need_public_talk(Task.currentTime1).then(talkList => {
+        console.log('=================talk')
+        console.log(talkList)
         return Promise.all(talkList.map(talk => Task.release_one_talk(talk)))
     })
 };
 Task.release_one_talk = (talk) => {
     return new Promise(resolve => {
-
+        console.log(talk)
         qcloudUpload(talk.materialId._id).then(() => {
             talkModel.update_lesson({status: 2}, talk._id).then(() => {
                 console.log(talk._id, '已发布');
                 resolve()
             })
-        }) //todo 上传失败
+        },()=>{}) //todo 上传失败
     })
 
 };
@@ -103,6 +106,7 @@ Task.run = () => {
     setInterval(() => {
         let hadRunTask = Task.hadRunTask();
         if (!hadRunTask) {
+            console.log('=======')
             Task.release_all_lesson()
                 .then(() => {
                     console.log('======1========')

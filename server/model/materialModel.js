@@ -12,6 +12,7 @@ var MaterialSchema = new Schema({
         unique: true
     },
     fileUrl: String,
+    cdnUrl: Boolean,
 
     files:Array,
 
@@ -27,7 +28,7 @@ var MaterialSchema = new Schema({
     zhVvtLen: Number,
     class: String,
     difficulty: String,
-    stage: Number, //生成文章状态 0未生成，１已生成
+    stage: {type: Number, default:0}, //生成文章状态 0未生成，１已生成
     duration: Number, //视频时长
 
 

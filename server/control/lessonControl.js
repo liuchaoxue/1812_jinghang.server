@@ -398,7 +398,9 @@ router.get('/_find', Lesson._find);  //根据条件分页获取课程
 router.get('/_getnum', Lesson._getnum); //根据条件获取课程的总数量
 router.post('/_update', Lesson._update); //更新课程信息
 router.get('/_delete', Lesson._delete); //删除一个课程
-router.post('/_public', Lesson._public); //定时发布一个课程
+// router.post('/_public', Lesson._public); //定时发布一个课程
+router.post('/:id/release', Lesson.release); //发布一个课程
+
 router.get('/_getone', Lesson._getone); //获取单个课程
 
 router.get('/_getall', Lesson._get_pop); //获取所有关联查询

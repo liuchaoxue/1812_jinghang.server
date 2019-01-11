@@ -8,7 +8,7 @@ var Video = require('../util/webGetVideo');
 var Audio = require('../util/webGetAudio');
 var FileModel = require('../model/fileModel');
 var MaterialModel = require('../model/materialModel');
-var CONFIG = require('../config/config');
+var config = require('../config/config');
 
 var Promise = require('promise');
 
@@ -243,7 +243,7 @@ function upload(req, res) {
     let file = req.files[0];
     // let fileExtension = file.originalname.split('.').pop();
     let fileUuid = UUID.v1();
-    let filePath = CONFIG.filePath + "/" + fileUuid.split('-')[0];
+    let filePath = config.filePath + "/" + fileUuid.split('-')[0];
     if (!fs.existsSync(filePath)) {
         fs.mkdirSync(filePath);
     }

@@ -100,31 +100,31 @@ Fun._delete = (req, res) => {
     }
 };
 
-Fun._public = (req, res) => {
-    let lessonInfo = req.body;
-    let id = lessonInfo.lessonId;
-    let time = lessonInfo.time; //定时时间戳，精确到秒
-    let nowTime = parseInt((Date.now())/1000);
-    if(id　&& time){
-        if(time <= nowTime){
-            return res.send({code: 1, data: '设定时间小于当前时间'})
-        }else {
-            let timeout = time - nowTime;
-            let pram = {status: 1};
-            pram.publicTime = time;
-            FunModel.update_lesson(pram, id).then(data => {
-                setTimeout(() => {
-                    FunModel.update_lesson({status: 2}, id).then(data => {
-                        console.log(id, '已发布');
-                    })
-                }, timeout * 1000);
-                return res.send({code: 0, data: data})
-            })
-        }
-    }else {
-        return res.send({code: 1, data: '缺少参数'})
-    }
-};
+// Fun._public = (req, res) => {
+//     let lessonInfo = req.body;
+//     let id = lessonInfo.lessonId;
+//     let time = lessonInfo.time; //定时时间戳，精确到秒
+//     let nowTime = parseInt((Date.now())/1000);
+//     if(id　&& time){
+//         if(time <= nowTime){
+//             return res.send({code: 1, data: '设定时间小于当前时间'})
+//         }else {
+//             let timeout = time - nowTime;
+//             let pram = {status: 1};
+//             pram.publicTime = time;
+//             FunModel.update_lesson(pram, id).then(data => {
+//                 setTimeout(() => {
+//                     FunModel.update_lesson({status: 2}, id).then(data => {
+//                         console.log(id, '已发布');
+//                     })
+//                 }, timeout * 1000);
+//                 return res.send({code: 0, data: data})
+//             })
+//         }
+//     }else {
+//         return res.send({code: 1, data: '缺少参数'})
+//     }
+// };
 
 
 
