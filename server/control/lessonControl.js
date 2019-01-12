@@ -63,6 +63,8 @@ Lesson._find = (req, res) => {
         if(page && num){
             if(character){
                 result.cms= {$regex : character};
+                result.title= {$regex : character};
+
             }
             LessonModel.get_all_file(result, parseInt(page), parseInt(num)).then(data => {
                 return res.send({code :0, data: data});
