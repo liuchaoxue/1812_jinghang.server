@@ -53,10 +53,10 @@ Task.release_one_fun = (fun) => {
     return new Promise(resolve => {
 
         qcloudUpload(fun.materialId._id).then(() => {
-            // funModel.update_lesson({status: 2}, fun._id).then(() => {
+            funModel.update_lesson({status: 2}, fun._id).then(() => {
                 console.log(fun._id, '已发布');
                 resolve()
-            // })
+            })
         },()=>{}) //todo 上传失败
     })
 
