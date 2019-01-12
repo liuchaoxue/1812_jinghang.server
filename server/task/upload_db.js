@@ -70,7 +70,7 @@ function updateOneMaterialModel(material) {
 
     return new Promise(resolve=>{
         var file_id = material.fileUrl.split('/').pop().split('.')[0];
-        var type = typeMap[material.fileUrl.split('/').pop().split('.')[0]]
+        var type = typeMap[material.fileUrl.split('/').pop().split('.')[1]]
         let updateInfo = {
             fileUrl: config.host+'/v1/media/'+material._id,
             files:[{'r':'default', file_id:file_id, type: type }],
