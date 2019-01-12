@@ -136,9 +136,9 @@ Material._create = (req, res) => {
     if(info.publicTime){
         pram.publicTime = info.publicTime;
     }
-    if(info.status){
-        pram.status = info.status;
-    }
+    // if(info.status){
+    //     pram.status = info.status;
+    // }
     if(info.stage){
         pram.stage = info.stage;
     }

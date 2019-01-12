@@ -62,7 +62,7 @@ function uploadToCDN(filePath){
                     reject(err);
                 } else {
                     console.log('========================')
-                    resolve("http://"+ data.Location);
+                        resolve("http://"+ data.Location);
                 }
             }
         );
