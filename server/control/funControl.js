@@ -3,7 +3,7 @@ var router = express.Router();
 var qcloudUpload = require('../util/qcloud-upload');
 
 let FunModel = require('../model/funModel');
-
+let MaterialModel = require("../model/materialModel");
 let Fun = {};
 
 
@@ -37,6 +37,10 @@ Fun._add = (req, res) => {
             pram.difficulty = lessonInfo.difficulty;
         }
 
+        if(lessonInfo.label){
+            pram.label = lessonInfo.label;
+        }
+
         let newFun = new FunModel(pram);
         newFun.save((err, data) => {
             if(err){
@@ -55,10 +59,38 @@ Fun._find = (req, res) => {
     getPram(lessonInfo, pram, (result) => {
         let page = lessonInfo.page;
         let num = lessonInfo.num;
+
         if(page && num){
-            FunModel.get_all_file(result, parseInt(page), parseInt(num)).then(data => {
-                return res.send({code :0, data: data});
-            });
+            let materialFilter;
+
+            if(lessonInfo.character){
+                let character = lessonInfo.character;
+                materialFilter = {};
+                if(character){
+                    materialFilter["$or"]= [ //多条件，数组
+                        {enVvt : {$regex : character}},
+                        {zhVvt : {$regex : character}},
+                        {zhTitle : {$regex : character}},
+                        {enTitle : {$regex : character}},
+                        {abstract : {$regex : character}}
+                    ];
+                }
+            }
+
+            let allMaterialList =  materialFilter? MaterialModel.get_all_num(materialFilter): Promise.resolve(null);
+
+            allMaterialList.then(materialList=>{
+                if(materialList){
+                    result['materialId'] = materialList.map(material => material._id);
+
+                }
+
+                FunModel.get_all_file(result,parseInt(page), parseInt(num)).then(data => {
+                    return res.send({code :0, data: data});
+                });
+            })
+
+
         }else {
             return  res.send({code: 1, data: '缺少参数'})
         }
@@ -198,6 +230,9 @@ function getPram(lessonInfo, pram, cb) {
     }
     if(lessonInfo.fun){
         pram.fun = lessonInfo.fun;
+    }
+    if(lessonInfo.label){
+        pram.label = lessonInfo.label;
     }
 
     cb(pram)

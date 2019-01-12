@@ -4,6 +4,8 @@ var qcloudUpload = require('../util/qcloud-upload');
 
 
 let TalkModel = require('../model/talkModel');
+let MaterialModel = require("../model/materialModel");
+
 let Talk = {};
 
 Talk._add = (req, res) => {
@@ -35,6 +37,9 @@ Talk._add = (req, res) => {
         if(lessonInfo.difficulty){
             pram.difficulty = lessonInfo.difficulty;
         }
+        if(lessonInfo.label){
+            pram.label = lessonInfo.label;
+        }
 
         let newFun = new TalkModel(pram);
         newFun.save((err, data) => {
@@ -55,9 +60,35 @@ Talk._find = (req, res) => {
         let page = lessonInfo.page;
         let num = lessonInfo.num;
         if(page && num){
-            TalkModel.get_all_file(result, parseInt(page), parseInt(num)).then(data => {
-                return res.send({code :0, data: data});
-            });
+            let materialFilter
+            if(lessonInfo.character){
+                let character = lessonInfo.character;
+                materialFilter = {};
+                if(character){
+                    materialFilter["$or"]= [ //多条件，数组
+                        {enVvt : {$regex : character}},
+                        {zhVvt : {$regex : character}},
+                        {zhTitle : {$regex : character}},
+                        {enTitle : {$regex : character}},
+                        {abstract : {$regex : character}}
+                    ];
+                }
+            }
+
+            let allMaterialList =  materialFilter? MaterialModel.get_all_num(materialFilter): Promise.resolve(null);
+
+            allMaterialList.then(materialList=>{
+                if(materialList){
+                    result['materialId'] = materialList.map(material => material._id);
+
+                }
+
+                TalkModel.get_all_file(result, parseInt(page), parseInt(num)).then(data => {
+                    return res.send({code :0, data: data});
+                });
+            })
+
+
         }else {
             return  res.send({code: 1, data: '缺少参数'})
         }
@@ -194,6 +225,9 @@ function getPram(lessonInfo, pram, cb) {
     }
     if(lessonInfo.fun){
         pram.fun = lessonInfo.fun;
+    }
+    if(lessonInfo.label){
+        pram.label = lessonInfo.label;
     }
 
     cb(pram)

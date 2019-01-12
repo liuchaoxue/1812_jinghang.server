@@ -59,24 +59,20 @@ Lesson._find = (req, res) => {
     getPram(lessonInfo, pram, (result) => {
         let page = lessonInfo.page;
         let num = lessonInfo.num;
+        let character = lessonInfo.character;
         if(page && num){
+            if(character){
+                result.cms= {$regex : character};
+            }
             LessonModel.get_all_file(result, parseInt(page), parseInt(num)).then(data => {
                 return res.send({code :0, data: data});
             });
+
         }else {
             return  res.send({code: 1, data: '缺少参数'})
         }
     });
 
-    // let page = lessonInfo.page;
-    // let num = lessonInfo.num;
-    // if(page && num){
-    //     LessonModel.get_all_file(pram, parseInt(page), parseInt(num)).then(datas => {
-    //         return res.send({code :0, datas: datas});
-    //     });
-    // }else {
-    //     return  res.send({code: 1, datas: '缺少参数'})
-    // }
 };
 
 Lesson._getnum = (req, res) => {

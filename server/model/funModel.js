@@ -10,7 +10,7 @@ var FunSchema = new Schema({
         ref: 'Material'
     },           // ——不在iword中显示
     fun: String, //ifun分类　——只在ifun显示(电影，娱乐之类)
-
+    label: Array,
     title: String,
     difficulty: String,
     category: String,  //类别（iword/italk）
@@ -30,9 +30,9 @@ var FunSchema = new Schema({
 });
 
 //获取所有课程
-FunSchema.statics.get_all_file = function (options, page, num) {
+FunSchema.statics.get_all_file = function (options,page, num) {
     return this.find(options)
-        .populate('materialId')
+            .populate("materialId")
         .skip((page-1)*num).limit(num).sort({updateTime:-1}).exec();
 };
 

@@ -10,7 +10,7 @@ var LessonSchema = new Schema({
         ref: 'Material'
     },           // ——不在iword中显示
     fun: String, //ifun分类　——只在ifun显示(电影，娱乐之类)
-
+    label: Array,
     title: String,
     difficulty: String,
     category: String,  //类别（iword/italk）

@@ -38,13 +38,16 @@ Material._find = (req, res) => {
         let num = materialInfo.num;
         let sort = materialInfo.sort ? JSON.parse(materialInfo.sort): undefined;
         let character = materialInfo.character;
-        result["$or"]= [ //多条件，数组
-            {enVvt : {$regex : character}},
-            {zhVvt : {$regex : character}},
-            {zhTitle : {$regex : character}},
-            {enTitle : {$regex : character}}
-        ];
-        console.log(result)
+        if(character){
+            result["$or"]= [ //多条件，数组
+                {enVvt : {$regex : character}},
+                {zhVvt : {$regex : character}},
+                {zhTitle : {$regex : character}},
+                {enTitle : {$regex : character}},
+                {abstract : {$regex : character}}
+            ];
+        }
+
         if(page && num){
             MaterialModel.get_all_file(result ,parseInt(page), parseInt(num), sort).then((data) => {
                 return res.send({code: 0, data: data});
@@ -124,7 +127,6 @@ Material._create = (req, res) => {
     let info = req.body;
     let pram = {};
     let newLesson;
-
     if(info.publicTime){
         pram.publicTime = info.publicTime;
     }
@@ -142,6 +144,9 @@ Material._create = (req, res) => {
     }
     if(info.class){
         pram.class = info.class;
+    }
+    if(info.label){
+        pram.label = info.label;
     }
     if(info.materialId){
         pram.materialId = info.materialId;
