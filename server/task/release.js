@@ -44,6 +44,8 @@ Task.release_one_lesson = (lesson) => {
 Task.release_all_fun = () => {
 
     return funModel.get_need_public_fun(Task.currentTime).then(funList => {
+        console.log('===============fun')
+        console.log(funList)
         return Promise.all(funList.map(fun => Task.release_one_fun(fun)))
     })
 };
@@ -63,12 +65,13 @@ Task.release_one_fun = (fun) => {
 Task.release_all_talk = () => {
 
     return talkModel.get_need_public_talk(Task.currentTime).then(talkList => {
+        console.log('=============t========')
+        console.log(talkList.length);
         return Promise.all(talkList.map(talk => Task.release_one_talk(talk)))
     })
 };
 Task.release_one_talk = (talk) => {
     return new Promise(resolve => {
-        console.log(talk)
         qcloudUpload(talk.materialId._id).then(() => {
             talkModel.update_lesson({status: 2}, talk._id).then(() => {
                 console.log(talk._id, '已发布');
