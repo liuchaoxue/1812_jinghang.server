@@ -314,8 +314,8 @@ function splitVideo(req, res){
             newMaterial.mark= newMaterial.mark + "_spilt_" + UUID.v4();
             newMaterial.sourceMaterial = material._id;
             newMaterial.fileUrl =   "";
-            newMaterial.enVvt = req.body.enVvtLen;
-            newMaterial.zhVvt = req.body.zhVvtLen;
+            newMaterial.enVvt = req.body.enVvt;
+            newMaterial.zhVvt = req.body.zhVvt;
             newMaterial.enVvtLen = newMaterial.enVvt ?  newMaterial.enVvt.length : 0;
             newMaterial.zhVvtLen = newMaterial.zhVvt ?  newMaterial.zhVvt.length : 0;
             delete newMaterial._id;
