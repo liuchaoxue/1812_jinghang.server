@@ -238,7 +238,7 @@ router.get('/_find', Talk._find); //通过分类查询标签
 router.get('/_getnum', Talk._getnum); //根据条件获取课程的总数量
 router.post('/_update', Talk._update); //更新课程信息
 router.get('/_delete', Talk._delete); //删除一个课程
-router.post('/_public', Talk.release); //定时发布一个课程
+// router.post('/_public', Talk.release); //定时发布一个课程
 router.post('/:id/release', Talk.release); //发布一个课程
 
 router.get('/_getone', Talk._getone); //获取单个课程
