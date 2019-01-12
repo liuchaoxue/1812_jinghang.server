@@ -62,7 +62,7 @@ var MaterialSchema = new Schema({
 // }
 
 //分页获取筛选条件下的所有文件
-MaterialSchema.statics.get_all_file = function (options, page, num, sort) {
+MaterialSchema.statics.get_all_file = function (options, character, page, num, sort) {
     sort = sort || {updateTime: -1};
     return this.find(options).skip((page - 1) * num).limit(num).sort(sort).exec();
 };

@@ -37,8 +37,16 @@ Material._find = (req, res) => {
         let page = materialInfo.page;
         let num = materialInfo.num;
         let sort = materialInfo.sort ? JSON.parse(materialInfo.sort): undefined;
+        let character = materialInfo.character;
+        result["$or"]= [ //多条件，数组
+            {enVvt : {$regex : character}},
+            {zhVvt : {$regex : character}},
+            {zhTitle : {$regex : character}},
+            {enTitle : {$regex : character}}
+        ];
+        console.log(result)
         if(page && num){
-            MaterialModel.get_all_file(result, parseInt(page), parseInt(num), sort).then((data) => {
+            MaterialModel.get_all_file(result ,parseInt(page), parseInt(num), sort).then((data) => {
                 return res.send({code: 0, data: data});
             })
         }else {
@@ -313,8 +321,6 @@ function insertMaterial(req, res){
 
 
         promise.then(label=>{
-            console.log('=========end')
-            console.log(label)
             newMaterial.label = label;
             MaterialModel.findOne({mark:newMaterial.mark}).then((material)=>{
                 if(material){
