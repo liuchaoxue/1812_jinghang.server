@@ -195,7 +195,7 @@ var Promise = require('promise');
 //         return res.send({code: 1, data: '缺少lessonId参数'})
 //     }
 // };
-//
+
 // function loadingBbcVVT(audioInfo, cb) {
 //
 //     let url = audioInfo.url;
