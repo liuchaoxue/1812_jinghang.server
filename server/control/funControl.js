@@ -181,6 +181,8 @@ Fun.release =  function(req, res){
             qcloudUpload(fun.materialId._id).then(()=>{
                 FunModel.update_lesson({publicTime: nowTime ,status:2}, id).then(data => {
                     return res.send({code: 0, data: data})
+                },()=>{
+                    return res.send({code: 1, data: {}})
                 })
             })
         })
