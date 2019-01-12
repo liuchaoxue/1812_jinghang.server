@@ -7,6 +7,11 @@ var LessonModel = require('../model/lessonModel');
 var FunModel = require('../model/funModel');
 var TalkModel = require('../model/talkModel');
 var LabelModel= require('../model/labelModel');
+var FileModel = require('../model/fileModel');
+
+var splitVideoTool = require('../util/splitVideo');
+var UUID = require('node-uuid');
+
 
 const config = require('../config/config');
 
@@ -29,6 +34,7 @@ let Material = {};
 //         })
 //     })
 // };
+
 
 Material._find = (req, res) => {
     let materialInfo = req.query;
@@ -255,6 +261,91 @@ function getPram(material, cb) {
     cb(pram);
 }
 
+function splitVideo(req, res){
+    /**
+     * 实例输入
+     * {
+     *
+     *  startTime:'00:00:03',
+     *  duration: '5',
+     *   "zhVvt": "高呀高呀",
+     *   "enVvt": "",
+
+     */
+    let typeMap = {'audio': 'mp3', 'video': 'mp4'};
+
+    MaterialModel.get_one(req.params.id).then((material)=>{
+        console.log(material)
+        if(!material) return res.send({success: false, data: {}})
+
+        let allPromises=  material.files.map(file=>{
+            let fileUuid = UUID.v4();
+
+            let originPath = config.filePath + "/" + file.file_id.split('-')[0] + '/'+ file.file_id;
+            let outPath = config.filePath + "/" + fileUuid.split('-')[0] + '/'+ fileUuid;
+            return new Promise((resolve, reject)=>{
+                 let type = typeMap[material.files[0].type];
+                splitVideoTool(originPath, outPath, req.body.startTime, req.body.duration, type).then(()=>{
+                    let newFile = {
+                        file_id: fileUuid,
+                    };
+                    new FileModel(newFile).save((err, file) => {
+                        if(err) return   reject()
+                        return resolve(fileUuid)
+                    });
+
+                },()=>{reject()})
+            })
+        });
+
+        Promise.all(allPromises).then((fileList)=>{
+
+            let files = material.files.map((file, index)=>{
+                file =  JSON.parse(JSON.stringify(file));
+                file.file_id = fileList[index];
+                delete file.cdn_url;
+                return file
+            });
+
+
+            let newMaterial =  JSON.parse(JSON.stringify(material))
+            newMaterial.files = files;
+
+            newMaterial.mark= newMaterial.mark + "_spilt_" + UUID.v4();
+            newMaterial.sourceMaterial = material._id;
+            newMaterial.fileUrl =   "";
+            newMaterial.enVvt = req.body.enVvtLen;
+            newMaterial.zhVvt = req.body.zhVvtLen;
+            newMaterial.enVvtLen = newMaterial.enVvt ?  newMaterial.enVvt.length : 0;
+            newMaterial.zhVvtLen = newMaterial.zhVvt ?  newMaterial.zhVvt.length : 0;
+            delete newMaterial._id;
+            delete newMaterial.createTime;
+            delete newMaterial.updateTime;
+
+            new MaterialModel(newMaterial).save((err, material)=>{
+
+                if(err) return res.send({success: false, data:{}})
+                material.fileUrl =  config.host+"/v1/media/"+material._id;
+                material.save((err,material)=>{
+                    res.send({success: true, data: material})
+                });
+
+            })
+
+
+
+
+        },()=>{
+            res.send({success: false, data: {}})
+
+        })
+
+
+
+    });
+
+}
+
 
 //删除文件
 function rmFile(fileUrl, cb) {
@@ -366,6 +457,7 @@ router.post('/_update', Material._update); //更新媒体信息
 router.get('/_delete', Material._delete); //删除一条媒体数据
 router.get('/_getone', Material._getone); //根据id获取一条媒体数据
 router.post('/_createCMS', Material._create); //生成cms文章
+router.post('/:id/splitFile', splitVideo);
 
 router.get('/_find_vvtlen', Material._find_by_vvtlen); //通过字幕长度查询
 
