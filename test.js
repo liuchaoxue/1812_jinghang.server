@@ -22,7 +22,7 @@ uploadFiles.forEach(function(ele,index){
         fs.mkdirSync(filePath);
     }
      fs.rename(path, Path.join(filePath, ele.split('.')[0]),(err)=>{
-         if(!err) return console.log(Path.join(filePath, ele.split('.')[0]))
+         if(!err) return console.log(path)
          console.log(err)
      })
 })
@@ -34,32 +34,32 @@ ewaFiles.forEach(function(ele,index){
     }
 
     fs.rename(path, Path.join(filePath, ele.split('.')[0]),(err)=>{
-        if(!err) return console.log(Path.join(filePath, ele.split('.')[0]))
+        if(!err) return console.log(path)
         console.log(err)
     })
 })
-tedFiles.forEach(function(ele,index){
-    let path = Path.join(tedPath, ele)
-    let filePath =  Path.join( basePath, ele.split('-')[0]);
-    if (!fs.existsSync(filePath)) {
-        fs.mkdirSync(filePath);
-    }
-    fs.rename(path, Path.join(filePath, ele.split('.')[0]),(err)=>{
-        if(!err) return console.log(Path.join(filePath, ele.split('.')[0]))
-        console.log(err)
-    })
-})
-bbcFiles.forEach(function(ele,index){
-    let path = Path.join(bbcPath, ele)
-    let filePath =  Path.join( basePath, ele.split('-')[0]);
-    if (!fs.existsSync(filePath)) {
-        fs.mkdirSync(filePath);
-    }
-    fs.rename(path, Path.join(filePath, ele.split('.')[0]),(err)=>{
-        if(!err) return console.log(Path.join(filePath, ele.split('.')[0]))
-        console.log(err)
-    })
-})
+// tedFiles.forEach(function(ele,index){
+//     let path = Path.join(tedPath, ele)
+//     let filePath =  Path.join( basePath, ele.split('-')[0]);
+//     if (!fs.existsSync(filePath)) {
+//         fs.mkdirSync(filePath);
+//     }
+//     fs.rename(path, Path.join(filePath, ele.split('.')[0]),(err)=>{
+//         if(!err) return console.log(Path.join(filePath, ele.split('.')[0]))
+//         console.log(err)
+//     })
+// })
+// bbcFiles.forEach(function(ele,index){
+//     let path = Path.join(bbcPath, ele)
+//     let filePath =  Path.join( basePath, ele.split('-')[0]);
+//     if (!fs.existsSync(filePath)) {
+//         fs.mkdirSync(filePath);
+//     }
+//     fs.rename(path, Path.join(filePath, ele.split('.')[0]),(err)=>{
+//         if(!err) return console.log(Path.join(filePath, ele.split('.')[0]))
+//         console.log(err)
+//     })
+// })
 
 
 //
