@@ -16,7 +16,7 @@ function qcloudUpload(id) {
     return new Promise((resolve, reject) => {
         console.log('=============start')
         materialModel.get_one(id).then(material=>{
-            // if(material.cdnUrl) return resolve();
+            if(material.cdnUrl) return resolve();
             let files = material.files;
 
 
