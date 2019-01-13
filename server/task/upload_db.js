@@ -155,7 +155,47 @@ var Promise = require('promise');
 //     },5000)
 //
 // }
-function main(){}
+
+
+
+function updateMaterialModel() {
+    return new Promise(resolve=>{
+        MaterialModel.get_all_num({}).then(materailList => {
+            let allPromises = materailList.map(materail=>updateOneMaterialModel(materail))
+            Promise.all(allPromises).then(()=>{
+                resolve()
+            })
+        })
+    })
+}
+
+
+function updateOneMaterialModel(material) {
+    material = (JSON.parse(JSON.stringify(material)));
+    let typeMap = {
+        'video': 'mp4',
+        'audio': 'mp3',
+        'pic': 'jpg'
+    };
+
+    return new Promise(resolve=>{
+
+        let updateInfo = {
+            fileUrl: material.fileUrl+ '.' + (typeMap[material.files[0].type] || 'mp4'),
+            cdnUrl: false
+        };
+        MaterialModel.update_material(updateInfo, material._id).then(()=>{
+            resolve()
+        })
+    })
+
+}
+
+function main(){
+    updateMaterialModel().then(()=>{
+        console.log('===================ok')
+    })
+}
 
 module.exports = {
     main: main
