@@ -11,17 +11,19 @@ var cos = new COS({
     SecretId: secretId,
     SecretKey: secretKey
 });
+const typeMap = {'audio': 'mp3', 'video': 'mp4', 'pic':'jpg'};
 function qcloudUpload(id) {
     return new Promise((resolve, reject) => {
         console.log('=============start')
         materialModel.get_one(id).then(material=>{
             // if(material.cdnUrl) return resolve();
-
             let files = material.files;
+
 
             let allPromises = files.map((file)=>{
                 let filePath = config.filePath + "/" + file.file_id.split('-')[0]+"/" + file.file_id
-                return uploadToCDN(filePath)
+                let fileName = file.file_id+"."+(typeMap[file.type]||'mp4');
+                return uploadToCDN(filePath, fileName)
             });
             Promise.all(allPromises).then(function(cdnFiles){
 
@@ -46,9 +48,9 @@ function qcloudUpload(id) {
     });
 }
 
-function uploadToCDN(filePath){
+function uploadToCDN(filePath,fileName){
     return new Promise((resolve, reject) => {
-        let fileName = path.basename(filePath);
+        // let fileName = path.basename(filePath);
         let keyPrefix = "/ispace/media/" + dateformat(new Date(), "yyyymmdd") + "/";
         cos.sliceUploadFile(
             {

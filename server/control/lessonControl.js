@@ -235,7 +235,10 @@ Lesson.release =  function(req, res){
             let audioList = lesson.cms.match(/!+\[audio]\(([^)]*)\)/gi) || [];
             let videoList = lesson.cms.match(/!+\[video]\(([^)]*)\)/gi) || [];
             let picList =  lesson.cms.match(/!+\[pic]\(([^)]*)\)/gi) || [];
-            let materialList = audioList.concat(videoList).concat(picList).map(url=> url.split(/\(|\)/)[1].split('/').pop());
+            console.log()
+            let materialList = audioList.concat(videoList).concat(picList).map(url=> {
+             return url.split(/\(|\)/)[1].split('/').pop().split('.')[0]
+            });
             Promise.all(materialList.map(material=> qcloudUpload(material))).then(()=>{
                 LessonModel.update_lesson({publicTime: nowTime ,status:2}, id).then(data => {
                     return res.send({code: 0, data: data})

@@ -26,7 +26,7 @@ Task.release_one_lesson = (lesson) => {
     let audioList = lesson.cms.match(/!+\[audio]\(([^)]*)\)/gi) || [];
     let videoList = lesson.cms.match(/!+\[video]\(([^)]*)\)/gi) || [];
     let picList = lesson.cms.match(/!+\[video]\(([^)]*)\)/gi) || [];
-    fileList = fileList.concat(audioList).concat(videoList).concat(picList).map(file => file.split(/\(|\)/)[1].split('/').pop())
+    fileList = fileList.concat(audioList).concat(videoList).concat(picList).map(file => file.split(/\(|\)/)[1].split('/').pop().split('.')[0])
    return new Promise(resolve => {
        Promise.all(fileList.map(file => {
            return qcloudUpload(file)

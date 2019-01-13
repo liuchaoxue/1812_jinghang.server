@@ -407,6 +407,8 @@ function insertMaterial(req, res){
      * file.type有音频"audio"，视频"video"，图片"pic"
      */
 
+
+    let typeMap = {'audio': 'mp3', 'video': 'mp4', 'pic':'jpg'};
     let newMaterial = req.body;
     newMaterial.files = [JSON.parse(JSON.stringify(newMaterial.file))];
     newMaterial.enVvtLen = newMaterial.enVvt ?  newMaterial.enVvt.length : 0;
@@ -430,7 +432,7 @@ function insertMaterial(req, res){
                 }else{
                     new MaterialModel(newMaterial).save((err, material)=>{
                         if(err) return res.send({success: false, data:{}})
-                        material.fileUrl =  config.host+"/v1/media/"+material._id;
+                        material.fileUrl =  config.host+"/v1/media/"+material._id+'.'+ (typeMap[newMaterial.files[0].type]||'mp4');
                         material.save((err,material)=>{
                             res.send({success: true, data: material})
                         });
