@@ -60,33 +60,21 @@ Talk._find = (req, res) => {
         let page = lessonInfo.page;
         let num = lessonInfo.num;
         if(page && num){
-            let materialFilter
-            if(lessonInfo.character){
-                let character = lessonInfo.character;
-                materialFilter = {};
-                if(character){
-                    materialFilter["$or"]= [ //多条件，数组
-                        {enVvt : {$regex : character}},
-                        {zhVvt : {$regex : character}},
-                        {zhTitle : {$regex : character}},
-                        {enTitle : {$regex : character}},
-                        {abstract : {$regex : character}}
-                    ];
-                }
+            let sort = lessonInfo.sort ? JSON.parse(lessonInfo.sort): undefined;
+            let character = lessonInfo.character;
+            if(character){
+                result["$or"]= [ //多条件，数组
+                    {"materialId.enVvt" : {$regex : character}},
+                    {"materialId.zhVvt" : {$regex : character}},
+                    {"materialId.zhTitle" : {$regex : character}},
+                    {"materialId.enTitle" : {$regex : character}},
+                    {"materialId.abstract": {$regex : character}}
+                ];
             }
+            TalkModel.get_all_file(result, sort,parseInt(page), parseInt(num)).then(data => {
+                return res.send({code :0, data: data});
+            });
 
-            let allMaterialList =  materialFilter? MaterialModel.get_all_num(materialFilter): Promise.resolve(null);
-
-            allMaterialList.then(materialList=>{
-                if(materialList){
-                    result['materialId'] = materialList.map(material => material._id);
-
-                }
-
-                TalkModel.get_all_file(result, parseInt(page), parseInt(num)).then(data => {
-                    return res.send({code :0, data: data});
-                });
-            })
 
 
         }else {

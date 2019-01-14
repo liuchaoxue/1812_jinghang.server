@@ -30,10 +30,39 @@ var TalkSchema = new Schema({
 });
 
 //获取所有课程
-TalkSchema.statics.get_all_file = function (options, page, num) {
-    return this.find(options)
-        .populate('materialId')
-        .skip((page-1)*num).limit(num).sort({updateTime:-1}).exec();
+TalkSchema.statics.get_all_file = function (options, sort,page, num) {
+    // return this.find(options)
+    //     .populate('materialId')
+    //     .sort({'materialId':1})
+    //     .skip((page-1)*num).limit(num).exec();
+
+    sort = sort || {"updateTime": -1};
+    console.log(sort)
+    return this.aggregate([
+        {
+            $lookup:
+                {
+                    from: "materials", //use the name of database collection not mongoose model
+                    localField: "materialId",
+                    foreignField: "_id",
+                    as: "materialId"
+                }
+        },
+
+        {
+            $unwind: "$materialId"  //remove array
+        },
+        {
+            $match:options
+        },
+        {
+            $sort: sort  // or {"profissional_doc": 1} for ascending
+        },
+        {$skip:(page-1)*num},{$limit:num}]
+    ).exec();
+
+
+
 };
 
 //获取所有已发布

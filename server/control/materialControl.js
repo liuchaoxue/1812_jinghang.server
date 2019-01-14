@@ -272,7 +272,7 @@ function splitVideo(req, res){
      *   "enVvt": "",
 
      */
-    let typeMap = {'audio': 'mp3', 'video': 'mp4'};
+    let typeMap = {'audio': 'mp3', 'video': 'mp4', 'pic':'jpg'};
 
     MaterialModel.get_one(req.params.id).then((material)=>{
         console.log(material)
@@ -325,7 +325,7 @@ function splitVideo(req, res){
             new MaterialModel(newMaterial).save((err, material)=>{
 
                 if(err) return res.send({success: false, data:{}})
-                material.fileUrl =  config.host+"/v1/media/"+material._id;
+                material.fileUrl =  config.host+"/v1/media/"+material._id +'.'+ (typeMap[newMaterial.files[0].type]||'mp4');
                 material.save((err,material)=>{
                     res.send({success: true, data: material})
                 });
