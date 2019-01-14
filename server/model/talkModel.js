@@ -37,7 +37,6 @@ TalkSchema.statics.get_all_file = function (options, sort,page, num) {
     //     .skip((page-1)*num).limit(num).exec();
 
     sort = sort || {"updateTime": -1};
-    console.log(sort)
     return this.aggregate([
         {
             $lookup:
