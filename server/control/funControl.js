@@ -75,6 +75,10 @@ Fun._find = (req, res) => {
                     {"materialId.abstract": {$regex : character}}
                 ];
             }
+            if(result.status){
+                result.status =  Number(result.status)
+            }
+
             FunModel.get_all_file(result, sort,parseInt(page), parseInt(num)).then(data => {
                 return res.send({code :0, data: data});
             });

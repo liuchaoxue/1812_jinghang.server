@@ -62,6 +62,7 @@ Talk._find = (req, res) => {
         if(page && num){
             let sort = lessonInfo.sort ? JSON.parse(lessonInfo.sort): undefined;
             let character = lessonInfo.character;
+
             if(character){
                 result["$or"]= [ //多条件，数组
                     {"materialId.enVvt" : {$regex : character}},
@@ -71,6 +72,10 @@ Talk._find = (req, res) => {
                     {"materialId.abstract": {$regex : character}}
                 ];
             }
+            if(result.status){
+                result.status =  Number(result.status)
+            }
+
             TalkModel.get_all_file(result, sort,parseInt(page), parseInt(num)).then(data => {
                 return res.send({code :0, data: data});
             });
