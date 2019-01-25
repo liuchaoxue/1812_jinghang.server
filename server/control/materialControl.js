@@ -53,6 +53,15 @@ Material._find = (req, res) => {
                 {abstract : {$regex : character}}
             ];
         }
+        if(materialInfo.startTime){
+            result.updateTime = result.updateTime || {};
+            result.updateTime["$gte"] = new Date(materialInfo.startTime + ' GMT+0800')
+        }
+
+        if(materialInfo.endTime){
+            result.updateTime = result.updateTime || {};
+            result.updateTime["$lt"] = new Date(materialInfo.endTime + ' GMT+0800')
+        }
 
         if(page && num){
             MaterialModel.get_all_file(result ,parseInt(page), parseInt(num), sort).then((data) => {
