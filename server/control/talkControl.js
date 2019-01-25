@@ -75,6 +75,16 @@ Talk._find = (req, res) => {
             if(result.status){
                 result.status =  Number(result.status)
             }
+            if(lessonInfo.startTime){
+                result.updateTime = result.updateTime || {};
+                result.updateTime["$gte"] = new Date(lessonInfo.startTime + ' GMT+0800')
+             }
+
+            if(lessonInfo.endTime){
+                result.updateTime = result.updateTime || {};
+                result.updateTime["$lt"] = new Date(lessonInfo.endTime + ' GMT+0800')
+            }
+
 
             TalkModel.get_all_file(result, sort,parseInt(page), parseInt(num)).then(data => {
                 return res.send({code :0, data: data});
@@ -224,7 +234,6 @@ function getPram(lessonInfo, pram, cb) {
     if(lessonInfo.label){
         pram.label = lessonInfo.label;
     }
-
     cb(pram)
 }
 
