@@ -68,7 +68,16 @@ var MaterialSchema = new Schema({
 //分页获取筛选条件下的所有文件
 MaterialSchema.statics.get_all_file = function (options, page, num, sort) {
     sort = sort || {updateTime: -1};
-    return this.find(options).skip((page - 1) * num).limit(num).sort(sort).exec();
+
+    sort = sort || {"updateTime": -1};
+    return new Promise(resolve => {
+        this.find(options).then(materialList=>{
+            var skip = (page-1)*num;
+            return resolve({count: materialList.length, data: materialList.splice(skip, num)})
+        })
+    });
+
+    // return this.find(options).skip((page - 1) * num).limit(num).sort(sort).exec();
 };
 
 //获取筛选条件下的所有文件数量

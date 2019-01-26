@@ -35,30 +35,62 @@ FunSchema.statics.get_all_file = function (options,sort,page, num) {
     //         .populate("materialId")
     //     .skip((page-1)*num).limit(num).sort({updateTime:-1}).exec();
 
+    //
+    // sort = sort || {"updateTime": -1};
+    // return this.aggregate([
+    //     {
+    //         $lookup:
+    //             {
+    //                 from: "materials", //use the name of database collection not mongoose model
+    //                 localField: "materialId",
+    //                 foreignField: "_id",
+    //                 as: "materialId"
+    //             }
+    //     },
+    //
+    //     {
+    //         $unwind: "$materialId"  //remove array
+    //     },
+    //     {
+    //         $match:options
+    //     },
+    //     {
+    //         $sort: sort  // or {"profissional_doc": 1} for ascending
+    //     },
+    //     {$skip:(page-1)*num},{$limit:num}]
+    // ).exec();
+
 
     sort = sort || {"updateTime": -1};
-    return this.aggregate([
-        {
-            $lookup:
-                {
-                    from: "materials", //use the name of database collection not mongoose model
-                    localField: "materialId",
-                    foreignField: "_id",
-                    as: "materialId"
-                }
-        },
+    return new Promise(resolve => {
+        this.aggregate([
+            {
+                $lookup:
+                    {
+                        from: "materials", //use the name of database collection not mongoose model
+                        localField: "materialId",
+                        foreignField: "_id",
+                        as: "materialId"
+                    }
+            },
 
-        {
-            $unwind: "$materialId"  //remove array
-        },
-        {
-            $match:options
-        },
-        {
-            $sort: sort  // or {"profissional_doc": 1} for ascending
-        },
-        {$skip:(page-1)*num},{$limit:num}]
-    ).exec();
+            {
+                $unwind: "$materialId"  //remove array
+            },
+            {
+                $match:options
+            },
+            {
+                $sort: sort  // or {"profissional_doc": 1} for ascending
+            }]
+
+        ).then(funList=>{
+            var skip = (page-1)*num;
+            return resolve({count: funList.length, data: funList.splice(skip, num)})
+        })
+    });
+
+
 
 };
 
