@@ -71,7 +71,7 @@ MaterialSchema.statics.get_all_file = function (options, page, num, sort) {
 
     sort = sort || {"updateTime": -1};
     return new Promise(resolve => {
-        this.find(options).then(materialList=>{
+        this.find(options).sort(sort).then(materialList=>{
             var skip = (page-1)*num;
             return resolve({count: materialList.length, data: materialList.splice(skip, num)})
         })
